@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSK Muzik Pulse | Le pouls de la musique</title>
+    
+    <!-- Le Favicon (l'icône dans l'onglet) -->
+    <link rel="icon" type="image/png" href="./assets/images/favicon.png">
+    
+    <!-- On charge une police moderne depuis Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- VARIABLES DE COULEURS --- */
+        :root {
+            --noir-profond: #0A0A0B;
+            --jaune-neon: #FFD700;
+            --rouge-neon: #FF0033;
+            --blanc: #FFFFFF;
+            --gris-texte: #A0A0A5;
+        }
+
+        /* --- RESET & BASE --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--noir-profond);
+            color: var(--blanc);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* --- HEADER (Barre de navigation) --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: rgba(10, 10, 11, 0.9); /* Un peu transparent */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        /* Le logo dans le header */
+        .logo-header img {
+            height: 50px; /* Ajustez la taille si nécessaire */
+        }
+
+        /* Les liens de navigation */
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            font-size: 15px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--jaune-neon);
+        }
+
+        /* --- BOUTONS --- */
+        .btn {
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            border: none;
+        }
+
+        .btn-jaune {
+            background-color: var(--jaune-neon);
+            color: var(--noir-profond);
+        }
+
+        .btn-jaune:hover {
+            background-color: #E5C100;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); /* Effet néon */
+            transform: translateY(-2px);
+        }
+
+        .btn-rouge {
+            background-color: var(--rouge-neon);
+            color: var(--blanc);
+        }
+
+        .btn-rouge:hover {
+            box-shadow: 0 0 15px rgba(255, 0, 51, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* --- HERO SECTION (La grande zone d'accueil) --- */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 80px 40px;
+            min-height: 80vh;
+            background: radial-gradient(circle at top right, rgba(255, 0, 51, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at bottom left, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .hero-content h1 span {
+            color: var(--jaune-neon);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--gris-texte);
+            margin-bottom: 40px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* L'image de droite dans le hero (l'icône de l'application) */
+        .hero-image img {
+            width: 400px;
+            animation: flotter 6s ease-in-out infinite;
+        }
+
+        /* Petite animation pour faire flotter l'icône */
+        @keyframes flotter {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* --- RESPONSIVE (Pour les téléphones) --- */
+        @media (max-width: 900px) {
+            header {
+                flex-direction: column;
+                padding: 20px;
+                gap: 20px;
+            }
+            
+            nav ul {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 50px 20px;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+                flex-direction: column;
+            }
+
+            .hero-image img {
+                width: 250px;
+                margin-top: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- EN-TÊTE -->
+    <header>
+        <div class="logo-header">
+            <!-- On appelle le logo que vous avez uploadé -->
+            <img src="./assets/images/logo-header.png" alt="DSK Muzik Pulse Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#accueil">Accueil</a></li>
+                <li><a href="#plans">Plans</a></li>
+                <li><a href="#comment-ca-marche">Comment ça marche</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <a href="#" class="btn btn-rouge">Connexion</a>
+    </header>
+
+    <!-- SECTION PRINCIPALE (HERO) -->
+    <section class="hero" id="accueil">
+        <div class="hero-content">
+            <h1>Le pouls de la <span>musique</span> angolaise.</h1>
+            <p>La plateforme ultime pour les artistes indépendants. Partagez votre musique, atteignez des milliers d'auditeurs et gagnez de l'argent réel.</p>
+            
+            <div class="hero-buttons">
+                <a href="#plans" class="btn btn-jaune">Commencer maintenant</a>
+                <a href="#comment-ca-marche" class="btn btn-rouge">Découvrir</a>
+            </div>
+        </div>
+
+        <div class="hero-image">
+            <!-- On appelle l'icône de l'application (le cercle) que vous avez uploadé -->
+            <img src="./assets/images/icone-application.png" alt="Icône DSK">
+        </div>
+    </section>
+
+</body>
+  </html>
