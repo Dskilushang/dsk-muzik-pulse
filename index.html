@@ -5,16 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DSK Muzik Pulse | Le pouls de la musique</title>
     
-    <!-- Le Favicon (l'icône dans l'onglet) -->
     <link rel="icon" type="image/png" href="./assets/images/favicon.png">
-    
-    <!-- On charge une police moderne depuis Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
 
     <style>
         /* --- VARIABLES DE COULEURS --- */
         :root {
             --noir-profond: #0A0A0B;
+            --noir-carte: #151518;
             --jaune-neon: #FFD700;
             --rouge-neon: #FF0033;
             --blanc: #FFFFFF;
@@ -35,30 +33,23 @@
             line-height: 1.6;
         }
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
+        a { text-decoration: none; color: inherit; }
 
-        /* --- HEADER (Barre de navigation) --- */
+        /* --- HEADER --- */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px 40px;
-            background-color: rgba(10, 10, 11, 0.9); /* Un peu transparent */
+            background-color: rgba(10, 10, 11, 0.9);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        /* Le logo dans le header */
-        .logo-header img {
-            height: 50px; /* Ajustez la taille si nécessaire */
-        }
+        .logo-header img { height: 50px; }
 
-        /* Les liens de navigation */
         nav ul {
             display: flex;
             list-style: none;
@@ -71,9 +62,7 @@
             transition: color 0.3s;
         }
 
-        nav a:hover {
-            color: var(--jaune-neon);
-        }
+        nav a:hover { color: var(--jaune-neon); }
 
         /* --- BOUTONS --- */
         .btn {
@@ -84,6 +73,7 @@
             transition: all 0.3s ease;
             display: inline-block;
             border: none;
+            font-size: 15px;
         }
 
         .btn-jaune {
@@ -92,8 +82,7 @@
         }
 
         .btn-jaune:hover {
-            background-color: #E5C100;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); /* Effet néon */
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
             transform: translateY(-2px);
         }
 
@@ -107,20 +96,27 @@
             transform: translateY(-2px);
         }
 
-        /* --- HERO SECTION (La grande zone d'accueil) --- */
+        .btn-contour {
+            background: transparent;
+            border: 2px solid var(--blanc);
+            color: var(--blanc);
+        }
+        .btn-contour:hover {
+            border-color: var(--jaune-neon);
+            color: var(--jaune-neon);
+        }
+
+        /* --- HERO SECTION --- */
         .hero {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 80px 40px;
-            min-height: 80vh;
-            background: radial-gradient(circle at top right, rgba(255, 0, 51, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at bottom left, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
+            min-height: 70vh;
+            background: radial-gradient(circle at top right, rgba(255, 0, 51, 0.1) 0%, transparent 50%);
         }
 
-        .hero-content {
-            max-width: 600px;
-        }
+        .hero-content { max-width: 600px; }
 
         .hero-content h1 {
             font-size: 3.5rem;
@@ -140,57 +136,175 @@
             margin-bottom: 40px;
         }
 
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-        }
+        .hero-buttons { display: flex; gap: 20px; }
 
-        /* L'image de droite dans le hero (l'icône de l'application) */
         .hero-image img {
             width: 400px;
             animation: flotter 6s ease-in-out infinite;
         }
 
-        /* Petite animation pour faire flotter l'icône */
         @keyframes flotter {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-20px); }
             100% { transform: translateY(0px); }
         }
 
-        /* --- RESPONSIVE (Pour les téléphones) --- */
+        /* --- SECTION PLANS --- */
+        .plans-section {
+            padding: 100px 40px;
+            text-align: center;
+        }
+
+        .plans-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .plans-section h2 span { color: var(--jaune-neon); }
+        
+        .plans-section > p {
+            color: var(--gris-texte);
+            margin-bottom: 50px;
+        }
+
+        .grid-plans {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card-plano {
+            background-color: var(--noir-carte);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 40px 30px;
+            width: 300px;
+            text-align: left;
+            transition: transform 0.3s, border-color 0.3s;
+            position: relative;
+        }
+
+        .card-plano:hover {
+            transform: translateY(-10px);
+            border-color: var(--jaune-neon);
+        }
+
+        .card-plano.popular {
+            border-color: var(--rouge-neon);
+            box-shadow: 0 0 30px rgba(255, 0, 51, 0.15);
+        }
+
+        .badge-popular {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--rouge-neon);
+            color: var(--blanc);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .card-plano h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .preco {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--jaune-neon);
+            margin-bottom: 20px;
+        }
+
+        .preco span {
+            font-size: 1rem;
+            color: var(--gris-texte);
+            font-weight: 400;
+        }
+
+        .card-plano ul {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .card-plano ul li {
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: var(--gris-texte);
+        }
+        
+        .card-plano ul li::before {
+            content: '✓';
+            color: var(--jaune-neon);
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .card-plano .btn { width: 100%; text-align: center; }
+
+        /* --- FENÊTRE MODALE (POP-UP) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.ativo { display: flex; }
+
+        .modal-box {
+            background: var(--noir-carte);
+            padding: 40px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid var(--rouge-neon);
+            position: relative;
+            text-align: center;
+        }
+
+        .fechar-modal {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gris-texte);
+        }
+        
+        .fechar-modal:hover { color: var(--blanc); }
+
+        .modal-box h2 { margin-bottom: 10px; }
+        .modal-box p { color: var(--gris-texte); margin-bottom: 20px; }
+        
+        .campo {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: var(--noir-profond);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: var(--blanc);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* --- RESPONSIVE --- */
         @media (max-width: 900px) {
-            header {
-                flex-direction: column;
-                padding: 20px;
-                gap: 20px;
-            }
-            
-            nav ul {
-                gap: 15px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .hero {
-                flex-direction: column;
-                text-align: center;
-                padding: 50px 20px;
-            }
-
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero-buttons {
-                justify-content: center;
-                flex-direction: column;
-            }
-
-            .hero-image img {
-                width: 250px;
-                margin-top: 50px;
-            }
+            header { flex-direction: column; padding: 20px; gap: 20px; }
+            nav ul { flex-wrap: wrap; justify-content: center; gap: 15px; }
+            .hero { flex-direction: column; text-align: center; padding: 50px 20px; }
+            .hero-content h1 { font-size: 2.5rem; }
+            .hero-buttons { justify-content: center; flex-direction: column; }
+            .hero-image img { width: 250px; margin-top: 50px; }
+            .plans-section { padding: 50px 20px; }
         }
     </style>
 </head>
@@ -199,7 +313,6 @@
     <!-- EN-TÊTE -->
     <header>
         <div class="logo-header">
-            <!-- On appelle le logo que vous avez uploadé -->
             <img src="./assets/images/logo-header.png" alt="DSK Muzik Pulse Logo">
         </div>
         <nav>
@@ -207,29 +320,100 @@
                 <li><a href="#accueil">Accueil</a></li>
                 <li><a href="#plans">Plans</a></li>
                 <li><a href="#comment-ca-marche">Comment ça marche</a></li>
-                <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
-        <a href="#" class="btn btn-rouge">Connexion</a>
+        <!-- Le bouton Connexion ouvre la Pop-up -->
+        <button class="btn btn-rouge" onclick="abrirModal()">Connexion</button>
     </header>
 
-    <!-- SECTION PRINCIPALE (HERO) -->
+    <!-- SECTION PRINCIPALE -->
     <section class="hero" id="accueil">
         <div class="hero-content">
             <h1>Le pouls de la <span>musique</span> angolaise.</h1>
-            <p>La plateforme ultime pour les artistes indépendants. Partagez votre musique, atteignez des milliers d'auditeurs et gagnez de l'argent réel.</p>
-            
+            <p>La plateforme ultime pour les artistes indépendants. Partagez votre musique et gagnez de l'argent réel.</p>
             <div class="hero-buttons">
                 <a href="#plans" class="btn btn-jaune">Commencer maintenant</a>
-                <a href="#comment-ca-marche" class="btn btn-rouge">Découvrir</a>
             </div>
         </div>
-
         <div class="hero-image">
-            <!-- On appelle l'icône de l'application (le cercle) que vous avez uploadé -->
             <img src="./assets/images/icone-application.png" alt="Icône DSK">
         </div>
     </section>
 
+    <!-- SECTION PLANS -->
+    <section class="plans-section" id="plans">
+        <h2>Choisissez votre <span>plan</span></h2>
+        <p>Sans engagement. Annulez à tout moment.</p>
+
+        <div class="grid-plans">
+            <!-- Plan Start -->
+            <div class="card-plano">
+                <h3>Start</h3>
+                <div class="preco">Gratuit</div>
+                <ul>
+                    <li>Divulgation basique</li>
+                    <li>1 musique/mois</li>
+                    <li>Support par email</li>
+                </ul>
+                <button class="btn btn-contour" onclick="abrirModal()">Choisir Start</button>
+            </div>
+
+            <!-- Plan Viral (Populaire) -->
+            <div class="card-plano popular">
+                <div class="badge-popular">Populaire</div>
+                <h3>Viral</h3>
+                <div class="preco">25.000 <span>Kz/mois</span></div>
+                <ul>
+                    <li>10 musiques/mois</li>
+                    <li>Distribution automatique</li>
+                    <li>Support prioritaire 24/7</li>
+                </ul>
+                <button class="btn btn-rouge" onclick="abrirModal()">Choisir Viral</button>
+            </div>
+
+            <!-- Plan Lenda -->
+            <div class="card-plano">
+                <h3>Lenda</h3>
+                <div class="preco">40.000 <span>Kz/mois</span></div>
+                <ul>
+                    <li>Divulgation illimitée</li>
+                    <li>Gestionnaire dédié</li>
+                    <li>Mise en avant maximale</li>
+                </ul>
+                <button class="btn btn-jaune" onclick="abrirModal()">Choisir Lenda</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FENÊTRE MODALE DE CONNEXION -->
+    <div class="modal-overlay" id="meuModal">
+        <div class="modal-box">
+            <span class="fechar-modal" onclick="fecharModal()">&times;</span>
+            <h2>Bienvenue</h2>
+            <p>Connectez-vous pour gérer vos musiques.</p>
+            <input type="email" class="campo" placeholder="Votre email">
+            <input type="password" class="campo" placeholder="Votre mot de passe">
+            <button class="btn btn-jaune" style="width: 100%;">Se connecter</button>
+        </div>
+    </div>
+
+    <!-- LE JAVASCRIPT POUR LA POP-UP -->
+    <script>
+        function abrirModal() {
+            document.getElementById('meuModal').classList.add('ativo');
+        }
+
+        function fecharModal() {
+            document.getElementById('meuModal').classList.remove('ativo');
+        }
+
+        // Fermer la modale si on clique en dehors de la boîte
+        document.getElementById('meuModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                fecharModal();
+            }
+        });
+    </script>
+
 </body>
-  </html>
+    </html>
