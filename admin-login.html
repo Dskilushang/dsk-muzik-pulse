@@ -104,8 +104,10 @@
 
     <script>
         // Sécurité : Vérifier si l'admin est connecté
-        if (localStorage.getItem('dsk_admin_logado') !== 'true') {
-            window.location.href = 'admin-login.html';
+if (localStorage.getItem('dsk_admin_logado') !== 'true') {
+    // Si on n'est pas connecté, on efface tout et on renvoie au login
+    localStorage.removeItem('dsk_admin_logado');
+    window.location.replace('admin-login.html');
         }
 
         function sairAdmin() {
