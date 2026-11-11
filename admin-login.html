@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | DSK Muzik Pulse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --noir: #0A0A0B; --carte: #151518; --jaune: #FFD700; --rouge: #FF0033; --blanc: #FFF; --gris: #A0A0A5; --vert: #10B981; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--noir); color: var(--blanc); display: flex; min-height: 100vh; }
+        
+        /* Sidebar Admin */
+        .sidebar { width: 260px; background: var(--carte); padding: 30px 20px; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; }
+        .sidebar h2 { font-size: 1.2rem; color: var(--rouge); margin-bottom: 30px; }
+        .menu-item { padding: 15px; border-radius: 10px; color: var(--gris); font-weight: 600; margin-bottom: 5px; cursor: pointer; }
+        .menu-item.ativo { background: rgba(255, 0, 51, 0.1); color: var(--rouge); }
+        .menu-item:hover { background: rgba(255,255,255,0.05); }
+        
+        .btn-sair { margin-top: auto; background: transparent; border: 1px solid var(--gris); color: var(--gris); padding: 12px; border-radius: 8px; cursor: pointer; }
+        .btn-sair:hover { border-color: var(--rouge); color: var(--rouge); }
+
+        /* Main Content */
+        .main { flex: 1; padding: 40px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; }
+        .header h1 { font-size: 1.8rem; }
+        
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .card { background: var(--carte); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); }
+        .card p { color: var(--gris); font-size: 0.9rem; margin-bottom: 10px; }
+        .card h3 { font-size: 2rem; font-weight: 800; }
+        .card.verde h3 { color: var(--vert); }
+        .card.jaune h3 { color: var(--jaune); }
+
+        .tabela { width: 100%; border-collapse: collapse; background: var(--carte); border-radius: 16px; overflow: hidden; }
+        .tabela th { background: rgba(255,255,255,0.02); padding: 15px; text-align: left; color: var(--gris); font-size: 0.8rem; }
+        .tabela td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        
+        .btn-acao { padding: 5px 10px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; margin-right: 5px; }
+        .btn-aprovar { background: var(--vert); color: #fff; }
+        .btn-recusar { background: var(--rouge); color: #fff; }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; flex-direction: row; overflow-x: auto; padding: 15px; }
+            .sidebar h2 { display: none; }
+            .menu-item { white-space: nowrap; margin-right: 10px; margin-bottom: 0; }
+            .main { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <h2>🛡️ ADMIN DSK</h2>
+        <div class="menu-item ativo">📊 Dashboard</div>
+        <div class="menu-item">🎵 Divulgações</div>
+        <div class="menu-item">👥 Artistes</div>
+        <div class="menu-item">💳 Paiements</div>
+        <button class="btn-sair" onclick="sairAdmin()">Sair</button>
+    </aside>
+
+    <main class="main">
+        <div class="header">
+            <h1>Vue Globale</h1>
+            <div>👤 Admin</div>
+        </div>
+
+        <div class="grid-cards">
+            <div class="card">
+                <p>Total Artistes</p>
+                <h3>0</h3>
+            </div>
+            <div class="card jaune">
+                <p>Divulgações en attente</p>
+                <h3>0</h3>
+            </div>
+            <div class="card verde">
+                <p>Revenus du mois (Kz)</p>
+                <h3>0</h3>
+            </div>
+        </div>
+
+        <h2 style="margin-bottom: 20px; font-size: 1.3rem;">Dernières demandes de divulgation</h2>
+        <table class="tabela">
+            <thead>
+                <tr>
+                    <th>Artiste</th>
+                    <th>Musique</th>
+                    <th>Plan</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 30px; color: var(--gris);">
+                        Aucune demande pour le moment.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+        // Sécurité : Vérifier si l'admin est connecté
+        if (localStorage.getItem('dsk_admin_logado') !== 'true') {
+            window.location.href = 'admin-login.html';
+        }
+
+        function sairAdmin() {
+            localStorage.removeItem('dsk_admin_logado');
+            window.location.href = 'admin-login.html';
+        }
+    </script>
+</body>
+</html>
