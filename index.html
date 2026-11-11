@@ -39,7 +39,6 @@
         .voltar-link { display: block; text-align: center; margin-top: 25px; font-size: 13px; color: var(--gris-texte); transition: color 0.3s; }
         .voltar-link:hover { color: var(--blanc); }
         
-        /* Message d'erreur/succès */
         .mensagem { text-align: center; font-size: 13px; margin-top: 15px; display: none; }
         .mensagem.erro { color: var(--rouge-neon); display: block; }
         .mensagem.sucesso { color: #10B981; display: block; }
@@ -67,7 +66,8 @@
                 <label>Mot de passe</label>
                 <input type="password" id="loginSenha" placeholder="••••••••">
             </div>
-            <button class="btn btn-jaune" onclick="fazerLogin()">Se connecter</button>
+            <!-- AJOUT DE type="button" ICI -->
+            <button type="button" class="btn btn-jaune" onclick="fazerLogin()">Se connecter</button>
             <div id="msgLogin" class="mensagem"></div>
         </div>
 
@@ -85,7 +85,8 @@
                 <label>Mot de passe</label>
                 <input type="password" id="cadSenha" placeholder="Créez un mot de passe sécurisé">
             </div>
-            <button class="btn btn-rouge" onclick="fazerCadastro()">Créer mon compte</button>
+            <!-- AJOUT DE type="button" ICI -->
+            <button type="button" class="btn btn-rouge" onclick="fazerCadastro()">Créer mon compte</button>
             <div id="msgCadastro" class="mensagem"></div>
         </div>
 
@@ -97,7 +98,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // 2. Vos vraies clés Firebase (copiées de votre capture)
+        // 2. Vos vraies clés Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyA7HeUqywxtrl36UxZrMBfkv-yGPIVLrI4",
             authDomain: "dsk-muzik-pulse.firebaseapp.com",
@@ -118,11 +119,16 @@
             const senha = document.getElementById('loginSenha').value;
             const msg = document.getElementById('msgLogin');
 
+            if(!email || !senha) {
+                msg.className = 'mensagem erro';
+                msg.textContent = "Veuillez remplir tous les champs.";
+                return;
+            }
+
             signInWithEmailAndPassword(auth, email, senha)
                 .then((userCredential) => {
                     msg.className = 'mensagem sucesso';
                     msg.textContent = "Connexion réussie ! Redirection...";
-                    // On sauvegarde l'email pour la page suivante
                     localStorage.setItem('dsk_nome_artista', userCredential.user.email);
                     setTimeout(() => { window.location.href = 'minha-conta.html'; }, 1500);
                 })
@@ -138,16 +144,28 @@
             const senha = document.getElementById('cadSenha').value;
             const msg = document.getElementById('msgCadastro');
 
+            if(!nome || !email || !senha) {
+                msg.className = 'mensagem erro';
+                msg.textContent = "Veuillez remplir tous les champs.";
+                return;
+            }
+
             createUserWithEmailAndPassword(auth, email, senha)
                 .then((userCredential) => {
                     msg.className = 'mensagem sucesso';
                     msg.textContent = "Compte créé avec succès !";
-                    localStorage.setItem('dsk_nome_artista', nome); // On sauvegarde le nom
+                    localStorage.setItem('dsk_nome_artista', nome);
                     setTimeout(() => { window.location.href = 'minha-conta.html'; }, 1500);
                 })
                 .catch((error) => {
                     msg.className = 'mensagem erro';
-                    msg.textContent = "Erreur : " + (error.code === 'auth/email-already-in-use' ? "Cet email est déjà utilisé." : "Mot de passe trop faible (6 caractères min).");
+                    if(error.code === 'auth/email-already-in-use') {
+                        msg.textContent = "Cet email est déjà utilisé.";
+                    } else if(error.code === 'auth/weak-password') {
+                        msg.textContent = "Mot de passe trop faible (6 caractères min).";
+                    } else {
+                        msg.textContent = "Erreur : " + error.message;
+                    }
                 });
         };
 
@@ -165,4 +183,4 @@
         };
     </script>
 </body>
-</html>
+    </html>
