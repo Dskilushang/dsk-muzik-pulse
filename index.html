@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DSK Muzik Pulse | Le pouls de la musique</title>
     
-    <link rel="icon" type="image/png" href="./assets/images/favicon.png">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
 
     <style>
@@ -74,6 +74,7 @@
             display: inline-block;
             border: none;
             font-size: 15px;
+            text-align: center;
         }
 
         .btn-jaune {
@@ -149,152 +150,53 @@
             100% { transform: translateY(0px); }
         }
 
-        /* --- SECTION PLANS --- */
-        .plans-section {
-            padding: 100px 40px;
-            text-align: center;
-        }
+        /* --- COMMENT ÇA MARCHE --- */
+        .passos-section { padding: 80px 40px; background-color: var(--noir-profond); text-align: center; }
+        .passos-section h2 { font-size: 2.5rem; margin-bottom: 50px; }
+        .passos-section h2 span { color: var(--jaune-neon); }
+        .grid-passos { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
+        .passo { background: var(--noir-carte); padding: 30px; border-radius: 16px; width: 250px; border: 1px solid rgba(255,255,255,0.05); }
+        .passo-num { font-size: 2rem; font-weight: 800; color: var(--rouge-neon); margin-bottom: 10px; }
+        .passo h3 { margin-bottom: 10px; font-size: 1.2rem; }
+        .passo p { color: var(--gris-texte); font-size: 0.9rem; }
 
-        .plans-section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        
+        /* --- PLANS --- */
+        .plans-section { padding: 100px 40px; text-align: center; background: #0d0d0f; }
+        .plans-section h2 { font-size: 2.5rem; margin-bottom: 10px; }
         .plans-section h2 span { color: var(--jaune-neon); }
-        
-        .plans-section > p {
-            color: var(--gris-texte);
-            margin-bottom: 50px;
-        }
-
-        .grid-plans {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
+        .plans-section > p { color: var(--gris-texte); margin-bottom: 50px; }
+        .grid-plans { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
         .card-plano {
-            background-color: var(--noir-carte);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 40px 30px;
-            width: 300px;
-            text-align: left;
-            transition: transform 0.3s, border-color 0.3s;
-            position: relative;
+            background-color: var(--noir-carte); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 40px 30px; width: 300px; text-align: left;
+            transition: transform 0.3s, border-color 0.3s; position: relative;
         }
-
-        .card-plano:hover {
-            transform: translateY(-10px);
-            border-color: var(--jaune-neon);
-        }
-
-        .card-plano.popular {
-            border-color: var(--rouge-neon);
-            box-shadow: 0 0 30px rgba(255, 0, 51, 0.15);
-        }
-
+        .card-plano:hover { transform: translateY(-10px); border-color: var(--jaune-neon); }
+        .card-plano.popular { border-color: var(--rouge-neon); box-shadow: 0 0 30px rgba(255, 0, 51, 0.15); }
         .badge-popular {
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--rouge-neon);
-            color: var(--blanc);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 800;
-            text-transform: uppercase;
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+            background-color: var(--rouge-neon); color: var(--blanc); padding: 5px 15px;
+            border-radius: 20px; font-size: 12px; font-weight: 800; text-transform: uppercase;
         }
-
-        .card-plano h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        .preco {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--jaune-neon);
-            margin-bottom: 20px;
-        }
-
-        .preco span {
-            font-size: 1rem;
-            color: var(--gris-texte);
-            font-weight: 400;
-        }
-
-        .card-plano ul {
-            list-style: none;
-            margin-bottom: 30px;
-        }
-
-        .card-plano ul li {
-            margin-bottom: 12px;
-            font-size: 14px;
-            color: var(--gris-texte);
-        }
-        
-        .card-plano ul li::before {
-            content: '✓';
-            color: var(--jaune-neon);
-            margin-right: 10px;
-            font-weight: bold;
-        }
-
+        .card-plano h3 { font-size: 1.5rem; margin-bottom: 10px; }
+        .preco { font-size: 2.5rem; font-weight: 800; color: var(--jaune-neon); margin-bottom: 20px; }
+        .preco span { font-size: 1rem; color: var(--gris-texte); font-weight: 400; }
+        .card-plano ul { list-style: none; margin-bottom: 30px; }
+        .card-plano ul li { margin-bottom: 12px; font-size: 14px; color: var(--gris-texte); }
+        .card-plano ul li::before { content: '✓'; color: var(--jaune-neon); margin-right: 10px; font-weight: bold; }
         .card-plano .btn { width: 100%; text-align: center; }
 
-        /* --- FENÊTRE MODALE (POP-UP) --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-overlay.ativo { display: flex; }
-
-        .modal-box {
-            background: var(--noir-carte);
-            padding: 40px;
-            border-radius: 16px;
-            width: 90%;
-            max-width: 400px;
-            border: 1px solid var(--rouge-neon);
-            position: relative;
-            text-align: center;
-        }
-
-        .fechar-modal {
-            position: absolute;
-            top: 15px; right: 20px;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--gris-texte);
-        }
-        
-        .fechar-modal:hover { color: var(--blanc); }
-
-        .modal-box h2 { margin-bottom: 10px; }
-        .modal-box p { color: var(--gris-texte); margin-bottom: 20px; }
-        
-        .campo {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 15px;
-            background: var(--noir-profond);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            color: var(--blanc);
-            font-family: 'Poppins', sans-serif;
-        }
+        /* --- FOOTER --- */
+        footer { background: #050505; padding: 60px 40px 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; max-width: 1200px; margin: 0 auto 40px; }
+        .footer-logo img { height: 40px; margin-bottom: 20px; }
+        .footer-desc { color: var(--gris-texte); font-size: 0.9rem; max-width: 300px; }
+        .footer-col h4 { margin-bottom: 20px; color: var(--blanc); }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col a { color: var(--gris-texte); font-size: 0.9rem; transition: color 0.3s; }
+        .footer-col a:hover { color: var(--jaune-neon); }
+        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); color: var(--gris-texte); font-size: 0.8rem; }
 
         /* --- RESPONSIVE --- */
         @media (max-width: 900px) {
@@ -304,29 +206,28 @@
             .hero-content h1 { font-size: 2.5rem; }
             .hero-buttons { justify-content: center; flex-direction: column; }
             .hero-image img { width: 250px; margin-top: 50px; }
-            .plans-section { padding: 50px 20px; }
+            .plans-section, .passos-section { padding: 50px 20px; }
+            .footer-grid { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 
-    <!-- EN-TÊTE -->
     <header>
         <div class="logo-header">
-            <img src="./assets/images/logo-header.png" alt="DSK Muzik Pulse Logo">
+            <img src="assets/images/logo-header.png" alt="DSK Muzik Pulse Logo">
         </div>
         <nav>
             <ul>
                 <li><a href="#accueil">Accueil</a></li>
+                <li><a href="#como-funciona">Comment ça marche</a></li>
                 <li><a href="#plans">Plans</a></li>
-                <li><a href="#comment-ca-marche">Comment ça marche</a></li>
             </ul>
         </nav>
-        <!-- Le bouton Connexion ouvre la Pop-up -->
-        <button class="btn btn-rouge" onclick="abrirModal()">Connexion</button>
+        <!-- BOUTON CONNEXION : Redirige maintenant vers la vraie page -->
+        <a href="login.html" class="btn btn-rouge">Connexion</a>
     </header>
 
-    <!-- SECTION PRINCIPALE -->
     <section class="hero" id="accueil">
         <div class="hero-content">
             <h1>Le pouls de la <span>musique</span> angolaise.</h1>
@@ -336,17 +237,41 @@
             </div>
         </div>
         <div class="hero-image">
-            <img src="./assets/images/icone-application.png" alt="Icône DSK">
+            <img src="assets/images/icone-application.png" alt="Icône DSK">
         </div>
     </section>
 
-    <!-- SECTION PLANS -->
+    <section class="passos-section" id="como-funciona">
+        <h2>Comment ça <span>marche</span> ?</h2>
+        <div class="grid-passos">
+            <div class="passo">
+                <div class="passo-num">01</div>
+                <h3>Choisissez un plan</h3>
+                <p>Sélectionnez le plan qui correspond à votre niveau actuel.</p>
+            </div>
+            <div class="passo">
+                <div class="passo-num">02</div>
+                <h3>Envoyez votre musique</h3>
+                <p>Téléchargez votre fichier audio (MP3, WAV ou MP4).</p>
+            </div>
+            <div class="passo">
+                <div class="passo-num">03</div>
+                <h3>Payez en sécurité</h3>
+                <p>Payez avec Multicaixa, Unitel Money ou virement bancaire.</p>
+            </div>
+            <div class="passo">
+                <div class="passo-num">04</div>
+                <h3>Gagnez de l'argent</h3>
+                <p>Recevez 70% des revenus générés par vos écoutes et téléchargements.</p>
+            </div>
+        </div>
+    </section>
+
     <section class="plans-section" id="plans">
         <h2>Choisissez votre <span>plan</span></h2>
         <p>Sans engagement. Annulez à tout moment.</p>
 
         <div class="grid-plans">
-            <!-- Plan Start -->
             <div class="card-plano">
                 <h3>Start</h3>
                 <div class="preco">Gratuit</div>
@@ -355,10 +280,9 @@
                     <li>1 musique/mois</li>
                     <li>Support par email</li>
                 </ul>
-                <button class="btn btn-contour" onclick="abrirModal()">Choisir Start</button>
+                <a href="login.html" class="btn btn-contour">Choisir Start</a>
             </div>
 
-            <!-- Plan Viral (Populaire) -->
             <div class="card-plano popular">
                 <div class="badge-popular">Populaire</div>
                 <h3>Viral</h3>
@@ -368,10 +292,9 @@
                     <li>Distribution automatique</li>
                     <li>Support prioritaire 24/7</li>
                 </ul>
-                <button class="btn btn-rouge" onclick="abrirModal()">Choisir Viral</button>
+                <a href="login.html" class="btn btn-rouge">Choisir Viral</a>
             </div>
 
-            <!-- Plan Lenda -->
             <div class="card-plano">
                 <h3>Lenda</h3>
                 <div class="preco">40.000 <span>Kz/mois</span></div>
@@ -380,40 +303,46 @@
                     <li>Gestionnaire dédié</li>
                     <li>Mise en avant maximale</li>
                 </ul>
-                <button class="btn btn-jaune" onclick="abrirModal()">Choisir Lenda</button>
+                <a href="login.html" class="btn btn-jaune">Choisir Lenda</a>
             </div>
         </div>
     </section>
 
-    <!-- FENÊTRE MODALE DE CONNEXION -->
-    <div class="modal-overlay" id="meuModal">
-        <div class="modal-box">
-            <span class="fechar-modal" onclick="fecharModal()">&times;</span>
-            <h2>Bienvenue</h2>
-            <p>Connectez-vous pour gérer vos musiques.</p>
-            <input type="email" class="campo" placeholder="Votre email">
-            <input type="password" class="campo" placeholder="Votre mot de passe">
-            <button class="btn btn-jaune" style="width: 100%;">Se connecter</button>
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-logo">
+                <img src="assets/images/logo-header.png" alt="DSK Muzik Pulse">
+                <p class="footer-desc">Le pouls de la musique angolaise. Partagez votre talent avec le monde.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Plateforme</h4>
+                <ul>
+                    <li><a href="#plans">Plans</a></li>
+                    <li><a href="#como-funciona">Comment ça marche</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="https://wa.me/244945125149">WhatsApp : +244 945 125 149</a></li>
+                    <li><a href="https://wa.me/244953047802">WhatsApp : +244 953 047 802</a></li>
+                    <li><a href="mailto:danielkilusisa@gmail.com">danielkilusisa@gmail.com</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Réseaux Sociaux</h4>
+                <ul>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">TikTok</a></li>
+                    <li><a href="#">YouTube</a></li>
+                </ul>
+            </div>
         </div>
-    </div>
-
-    <!-- LE JAVASCRIPT POUR LA POP-UP -->
-    <script>
-        function abrirModal() {
-            document.getElementById('meuModal').classList.add('ativo');
-        }
-
-        function fecharModal() {
-            document.getElementById('meuModal').classList.remove('ativo');
-        }
-
-        // Fermer la modale si on clique en dehors de la boîte
-        document.getElementById('meuModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                fecharModal();
-            }
-        });
-    </script>
+        <div class="footer-bottom">
+            &copy; 2024 DSK Muzik Pulse. Tous droits réservés. Luanda, Angola.
+        </div>
+    </footer>
 
 </body>
-    </html>
+            </html>
