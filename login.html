@@ -3,26 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Firebase</title>
+    <title>Connexion | DSK Muzik Pulse</title>
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
-        body { background-color: #0A0A0B; color: white; font-family: sans-serif; text-align: center; padding: 50px; }
-        button { padding: 15px 30px; font-size: 18px; background: #FFD700; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 20px; }
-        #resultado { margin-top: 30px; font-size: 16px; padding: 20px; border-radius: 10px; word-wrap: break-word; }
-        .sucesso { background: #10B981; color: white; }
-        .erro { background: #FF0033; color: white; }
+        :root { --noir-profond: #0A0A0B; --noir-carte: #151518; --jaune-neon: #FFD700; --rouge-neon: #FF0033; --blanc: #FFFFFF; --gris-texte: #A0A0A5; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--noir-profond) !important; color: var(--blanc) !important; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background: radial-gradient(circle at top right, rgba(255, 0, 51, 0.1) 0%, transparent 40%), radial-gradient(circle at bottom left, rgba(255, 215, 0, 0.05) 0%, transparent 40%); }
+        a { text-decoration: none; color: inherit; }
+        
+        .auth-container { background-color: var(--noir-carte); padding: 40px; border-radius: 20px; width: 100%; max-width: 420px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); position: relative; }
+        .logo-top { text-align: center; margin-bottom: 30px; }
+        .logo-top img { height: 80px; margin-bottom: 10px; }
+        
+        .tabs { display: flex; margin-bottom: 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .tab { flex: 1; padding: 15px; text-align: center; font-weight: 600; cursor: pointer; color: var(--gris-texte); border-bottom: 2px solid transparent; transition: all 0.3s ease; }
+        .tab.ativo { color: var(--blanc); border-bottom: 2px solid var(--rouge-neon); }
+        
+        .formulario { display: none; }
+        .formulario.ativo { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .campo-grupo { margin-bottom: 20px; }
+        .campo-grupo label { display: block; font-size: 13px; color: var(--gris-texte); margin-bottom: 8px; }
+        .campo-grupo input { width: 100%; padding: 14px; background: var(--noir-profond); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: var(--blanc); font-size: 15px; outline: none; transition: border 0.3s; }
+        .campo-grupo input:focus { border-color: var(--jaune-neon); box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
+        
+        .btn { width: 100%; padding: 15px; border-radius: 8px; font-weight: 800; font-size: 16px; cursor: pointer; border: none; transition: all 0.3s ease; margin-top: 10px; }
+        .btn-jaune { background-color: var(--jaune-neon); color: var(--noir-profond); }
+        .btn-jaune:hover { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); transform: translateY(-2px); }
+        .btn-rouge { background-color: var(--rouge-neon); color: var(--blanc); }
+        .btn-rouge:hover { box-shadow: 0 0 20px rgba(255, 0, 51, 0.6); transform: translateY(-2px); }
+        
+        .voltar-link { display: block; text-align: center; margin-top: 25px; font-size: 13px; color: var(--gris-texte); transition: color 0.3s; }
+        .voltar-link:hover { color: var(--blanc); }
+        
+        .mensagem { text-align: center; font-size: 13px; margin-top: 15px; display: none; }
+        .mensagem.erro { color: var(--rouge-neon); display: block; }
+        .mensagem.sucesso { color: #10B981; display: block; }
     </style>
 </head>
 <body>
-    <h1>Test de connexion Firebase</h1>
-    <p>Cliquez sur le bouton pour tester.</p>
-    <button onclick="testarCadastro()">Tester la création de compte</button>
-    <div id="resultado"></div>
 
-    <!-- Firebase -->
+    <div class="auth-container">
+        <div class="logo-top">
+            <img src="assets/images/logo-header.png" alt="DSK Muzik Pulse">
+        </div>
+
+        <div class="tabs">
+            <div class="tab ativo" onclick="mudarTab('login')">Connexion</div>
+            <div class="tab" onclick="mudarTab('cadastro')">Inscription</div>
+        </div>
+
+        <div id="form-login" class="formulario ativo">
+            <div class="campo-grupo">
+                <label>E-mail</label>
+                <input type="email" id="loginEmail" placeholder="seu@email.com">
+            </div>
+            <div class="campo-grupo">
+                <label>Mot de passe</label>
+                <input type="password" id="loginSenha" placeholder="••••••••">
+            </div>
+            <button type="button" class="btn btn-jaune" onclick="fazerLogin()">Se connecter</button>
+            <div id="msgLogin" class="mensagem"></div>
+        </div>
+
+        <div id="form-cadastro" class="formulario">
+            <div class="campo-grupo">
+                <label>Nom complet</label>
+                <input type="text" id="cadNome" placeholder="Votre nom d'artiste">
+            </div>
+            <div class="campo-grupo">
+                <label>E-mail</label>
+                <input type="email" id="cadEmail" placeholder="seu@email.com">
+            </div>
+            <div class="campo-grupo">
+                <label>Mot de passe</label>
+                <input type="password" id="cadSenha" placeholder="Créez un mot de passe sécurisé">
+            </div>
+            <button type="button" class="btn btn-rouge" onclick="fazerCadastro()">Créer mon compte</button>
+            <div id="msgCadastro" class="mensagem"></div>
+        </div>
+
+        <a href="index.html" class="voltar-link">← Retour à l'accueil</a>
+    </div>
+
+    <!-- Firebase v8 (plus stable sur mobile) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
     <script>
+        // 1. LA CLÉ EXACTE (J'ai pris celle de votre capture précédente)
         var firebaseConfig = {
             apiKey: "AIzaSyA7HeUqywxtrl36UxZrMBfkv-yGPIVLrI4",
             authDomain: "dsk-muzik-pulse.firebaseapp.com",
@@ -35,21 +107,75 @@
         firebase.initializeApp(firebaseConfig);
         var auth = firebase.auth();
 
-        function testarCadastro() {
-            var res = document.getElementById('resultado');
-            res.className = '';
-            res.innerHTML = '⏳ Envoi de la requête à Firebase...';
+        // 2. FONCTION DE CONNEXION
+        function fazerLogin() {
+            var email = document.getElementById('loginEmail').value;
+            var senha = document.getElementById('loginSenha').value;
+            var msg = document.getElementById('msgLogin');
 
-            auth.createUserWithEmailAndPassword("test1234@dskmuzikpulse.com", "123456")
-                .then(function(user) {
-                    res.className = 'sucesso';
-                    res.innerHTML = '✅ SUCCÈS ! Firebase a répondu. Le compte test a été créé.';
+            if(!email || !senha) {
+                msg.className = 'mensagem erro';
+                msg.textContent = "Veuillez remplir tous les champs.";
+                return;
+            }
+
+            auth.signInWithEmailAndPassword(email, senha)
+                .then(function(userCredential) {
+                    msg.className = 'mensagem sucesso';
+                    msg.textContent = "Connexion réussie ! Redirection...";
+                    localStorage.setItem('dsk_nome_artista', userCredential.user.email);
+                    setTimeout(function() { window.location.href = 'minha-conta.html'; }, 1500);
                 })
                 .catch(function(error) {
-                    res.className = 'erro';
-                    res.innerHTML = '❌ ERREUR : ' + error.code + '<br>' + error.message;
+                    msg.className = 'mensagem erro';
+                    msg.textContent = "Erreur : Email ou mot de passe incorrect.";
                 });
+        }
+
+        // 3. FONCTION D'INSCRIPTION
+        function fazerCadastro() {
+            var nome = document.getElementById('cadNome').value;
+            var email = document.getElementById('cadEmail').value;
+            var senha = document.getElementById('cadSenha').value;
+            var msg = document.getElementById('msgCadastro');
+
+            if(!nome || !email || !senha) {
+                msg.className = 'mensagem erro';
+                msg.textContent = "Veuillez remplir tous les champs.";
+                return;
+            }
+
+            auth.createUserWithEmailAndPassword(email, senha)
+                .then(function(userCredential) {
+                    msg.className = 'mensagem sucesso';
+                    msg.textContent = "Compte créé avec succès !";
+                    localStorage.setItem('dsk_nome_artista', nome);
+                    setTimeout(function() { window.location.href = 'minha-conta.html'; }, 1500);
+                })
+                .catch(function(error) {
+                    msg.className = 'mensagem erro';
+                    if(error.code === 'auth/email-already-in-use') {
+                        msg.textContent = "Cet email est déjà utilisé.";
+                    } else if(error.code === 'auth/weak-password') {
+                        msg.textContent = "Mot de passe trop faible (6 caractères min).";
+                    } else {
+                        msg.textContent = "Erreur : " + error.message;
+                    }
+                });
+        }
+
+        // 4. CHANGER D'ONGLET
+        function mudarTab(tipo) {
+            document.querySelectorAll('.tab').forEach(function(tab) { tab.classList.remove('ativo'); });
+            document.querySelectorAll('.formulario').forEach(function(form) { form.classList.remove('ativo'); });
+            if (tipo === 'login') {
+                document.querySelectorAll('.tab')[0].classList.add('ativo');
+                document.getElementById('form-login').classList.add('ativo');
+            } else {
+                document.querySelectorAll('.tab')[1].classList.add('ativo');
+                document.getElementById('form-cadastro').classList.add('ativo');
+            }
         }
     </script>
 </body>
-</html>
+            </html>
