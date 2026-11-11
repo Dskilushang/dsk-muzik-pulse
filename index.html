@@ -3,346 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DSK Muzik Pulse | Le pouls de la musique</title>
-    
+    <title>Connexion | DSK Muzik Pulse</title>
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-
+    
     <style>
-        /* --- VARIABLES DE COULEURS --- */
-        :root {
-            --noir-profond: #0A0A0B;
-            --noir-carte: #151518;
-            --jaune-neon: #FFD700;
-            --rouge-neon: #FF0033;
-            --blanc: #FFFFFF;
-            --gris-texte: #A0A0A5;
-        }
-
-        /* --- RESET & BASE --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            background-color: var(--noir-profond);
-            color: var(--blanc);
-            line-height: 1.6;
-        }
-
+        :root { --noir-profond: #0A0A0B; --noir-carte: #151518; --jaune-neon: #FFD700; --rouge-neon: #FF0033; --blanc: #FFFFFF; --gris-texte: #A0A0A5; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--noir-profond) !important; color: var(--blanc) !important; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background: radial-gradient(circle at top right, rgba(255, 0, 51, 0.1) 0%, transparent 40%), radial-gradient(circle at bottom left, rgba(255, 215, 0, 0.05) 0%, transparent 40%); }
         a { text-decoration: none; color: inherit; }
-
-        /* --- HEADER --- */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 40px;
-            background-color: rgba(10, 10, 11, 0.9);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo-header img { height: 50px; }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-        }
-
-        nav a {
-            font-size: 15px;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-
-        nav a:hover { color: var(--jaune-neon); }
-
-        /* --- BOUTONS --- */
-        .btn {
-            padding: 10px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-block;
-            border: none;
-            font-size: 15px;
-            text-align: center;
-        }
-
-        .btn-jaune {
-            background-color: var(--jaune-neon);
-            color: var(--noir-profond);
-        }
-
-        .btn-jaune:hover {
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-            transform: translateY(-2px);
-        }
-
-        .btn-rouge {
-            background-color: var(--rouge-neon);
-            color: var(--blanc);
-        }
-
-        .btn-rouge:hover {
-            box-shadow: 0 0 15px rgba(255, 0, 51, 0.6);
-            transform: translateY(-2px);
-        }
-
-        .btn-contour {
-            background: transparent;
-            border: 2px solid var(--blanc);
-            color: var(--blanc);
-        }
-        .btn-contour:hover {
-            border-color: var(--jaune-neon);
-            color: var(--jaune-neon);
-        }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 80px 40px;
-            min-height: 70vh;
-            background: radial-gradient(circle at top right, rgba(255, 0, 51, 0.1) 0%, transparent 50%);
-        }
-
-        .hero-content { max-width: 600px; }
-
-        .hero-content h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 20px;
-        }
-
-        .hero-content h1 span {
-            color: var(--jaune-neon);
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-        }
-
-        .hero-content p {
-            font-size: 1.2rem;
-            color: var(--gris-texte);
-            margin-bottom: 40px;
-        }
-
-        .hero-buttons { display: flex; gap: 20px; }
-
-        .hero-image img {
-            width: 400px;
-            animation: flotter 6s ease-in-out infinite;
-        }
-
-        @keyframes flotter {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
-        }
-
-        /* --- COMMENT ÇA MARCHE --- */
-        .passos-section { padding: 80px 40px; background-color: var(--noir-profond); text-align: center; }
-        .passos-section h2 { font-size: 2.5rem; margin-bottom: 50px; }
-        .passos-section h2 span { color: var(--jaune-neon); }
-        .grid-passos { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
-        .passo { background: var(--noir-carte); padding: 30px; border-radius: 16px; width: 250px; border: 1px solid rgba(255,255,255,0.05); }
-        .passo-num { font-size: 2rem; font-weight: 800; color: var(--rouge-neon); margin-bottom: 10px; }
-        .passo h3 { margin-bottom: 10px; font-size: 1.2rem; }
-        .passo p { color: var(--gris-texte); font-size: 0.9rem; }
-
-        /* --- PLANS --- */
-        .plans-section { padding: 100px 40px; text-align: center; background: #0d0d0f; }
-        .plans-section h2 { font-size: 2.5rem; margin-bottom: 10px; }
-        .plans-section h2 span { color: var(--jaune-neon); }
-        .plans-section > p { color: var(--gris-texte); margin-bottom: 50px; }
-        .grid-plans { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        .card-plano {
-            background-color: var(--noir-carte); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px; padding: 40px 30px; width: 300px; text-align: left;
-            transition: transform 0.3s, border-color 0.3s; position: relative;
-        }
-        .card-plano:hover { transform: translateY(-10px); border-color: var(--jaune-neon); }
-        .card-plano.popular { border-color: var(--rouge-neon); box-shadow: 0 0 30px rgba(255, 0, 51, 0.15); }
-        .badge-popular {
-            position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
-            background-color: var(--rouge-neon); color: var(--blanc); padding: 5px 15px;
-            border-radius: 20px; font-size: 12px; font-weight: 800; text-transform: uppercase;
-        }
-        .card-plano h3 { font-size: 1.5rem; margin-bottom: 10px; }
-        .preco { font-size: 2.5rem; font-weight: 800; color: var(--jaune-neon); margin-bottom: 20px; }
-        .preco span { font-size: 1rem; color: var(--gris-texte); font-weight: 400; }
-        .card-plano ul { list-style: none; margin-bottom: 30px; }
-        .card-plano ul li { margin-bottom: 12px; font-size: 14px; color: var(--gris-texte); }
-        .card-plano ul li::before { content: '✓'; color: var(--jaune-neon); margin-right: 10px; font-weight: bold; }
-        .card-plano .btn { width: 100%; text-align: center; }
-
-        /* --- FOOTER --- */
-        footer { background: #050505; padding: 60px 40px 20px; border-top: 1px solid rgba(255,255,255,0.05); }
-        .footer-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; max-width: 1200px; margin: 0 auto 40px; }
-        .footer-logo img { height: 40px; margin-bottom: 20px; }
-        .footer-desc { color: var(--gris-texte); font-size: 0.9rem; max-width: 300px; }
-        .footer-col h4 { margin-bottom: 20px; color: var(--blanc); }
-        .footer-col ul { list-style: none; }
-        .footer-col ul li { margin-bottom: 10px; }
-        .footer-col a { color: var(--gris-texte); font-size: 0.9rem; transition: color 0.3s; }
-        .footer-col a:hover { color: var(--jaune-neon); }
-        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); color: var(--gris-texte); font-size: 0.8rem; }
-
-        /* --- RESPONSIVE --- */
-        @media (max-width: 900px) {
-            header { flex-direction: column; padding: 20px; gap: 20px; }
-            nav ul { flex-wrap: wrap; justify-content: center; gap: 15px; }
-            .hero { flex-direction: column; text-align: center; padding: 50px 20px; }
-            .hero-content h1 { font-size: 2.5rem; }
-            .hero-buttons { justify-content: center; flex-direction: column; }
-            .hero-image img { width: 250px; margin-top: 50px; }
-            .plans-section, .passos-section { padding: 50px 20px; }
-            .footer-grid { flex-direction: column; }
-        }
+        
+        .auth-container { background-color: var(--noir-carte); padding: 40px; border-radius: 20px; width: 100%; max-width: 420px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); position: relative; }
+        .logo-top { text-align: center; margin-bottom: 30px; }
+        .logo-top img { height: 80px; margin-bottom: 10px; }
+        
+        .tabs { display: flex; margin-bottom: 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .tab { flex: 1; padding: 15px; text-align: center; font-weight: 600; cursor: pointer; color: var(--gris-texte); border-bottom: 2px solid transparent; transition: all 0.3s ease; }
+        .tab.ativo { color: var(--blanc); border-bottom: 2px solid var(--rouge-neon); }
+        
+        .formulario { display: none; }
+        .formulario.ativo { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .campo-grupo { margin-bottom: 20px; }
+        .campo-grupo label { display: block; font-size: 13px; color: var(--gris-texte); margin-bottom: 8px; }
+        .campo-grupo input { width: 100%; padding: 14px; background: var(--noir-profond); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: var(--blanc); font-size: 15px; outline: none; transition: border 0.3s; }
+        .campo-grupo input:focus { border-color: var(--jaune-neon); box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
+        
+        .btn { width: 100%; padding: 15px; border-radius: 8px; font-weight: 800; font-size: 16px; cursor: pointer; border: none; transition: all 0.3s ease; margin-top: 10px; }
+        .btn-jaune { background-color: var(--jaune-neon); color: var(--noir-profond); }
+        .btn-jaune:hover { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); transform: translateY(-2px); }
+        .btn-rouge { background-color: var(--rouge-neon); color: var(--blanc); }
+        .btn-rouge:hover { box-shadow: 0 0 20px rgba(255, 0, 51, 0.6); transform: translateY(-2px); }
+        
+        .voltar-link { display: block; text-align: center; margin-top: 25px; font-size: 13px; color: var(--gris-texte); transition: color 0.3s; }
+        .voltar-link:hover { color: var(--blanc); }
+        
+        /* Message d'erreur/succès */
+        .mensagem { text-align: center; font-size: 13px; margin-top: 15px; display: none; }
+        .mensagem.erro { color: var(--rouge-neon); display: block; }
+        .mensagem.sucesso { color: #10B981; display: block; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo-header">
-            <img src="assets/images/logo-header.png" alt="DSK Muzik Pulse Logo">
+    <div class="auth-container">
+        <div class="logo-top">
+            <img src="assets/images/logo-header.png" alt="DSK Muzik Pulse">
         </div>
-        <nav>
-            <ul>
-                <li><a href="#accueil">Accueil</a></li>
-                <li><a href="#como-funciona">Comment ça marche</a></li>
-                <li><a href="#plans">Plans</a></li>
-            </ul>
-        </nav>
-        <!-- BOUTON CONNEXION : Redirige maintenant vers la vraie page -->
-        <a href="login.html" class="btn btn-rouge">Connexion</a>
-    </header>
 
-    <section class="hero" id="accueil">
-        <div class="hero-content">
-            <h1>Le pouls de la <span>musique</span> angolaise.</h1>
-            <p>La plateforme ultime pour les artistes indépendants. Partagez votre musique et gagnez de l'argent réel.</p>
-            <div class="hero-buttons">
-                <a href="#plans" class="btn btn-jaune">Commencer maintenant</a>
-            </div>
+        <div class="tabs">
+            <div class="tab ativo" onclick="mudarTab('login')">Connexion</div>
+            <div class="tab" onclick="mudarTab('cadastro')">Inscription</div>
         </div>
-        <div class="hero-image">
-            <img src="assets/images/icone-application.png" alt="Icône DSK">
+
+        <!-- Formulaire de Connexion -->
+        <div id="form-login" class="formulario ativo">
+            <div class="campo-grupo">
+                <label>E-mail</label>
+                <input type="email" id="loginEmail" placeholder="seu@email.com">
+            </div>
+            <div class="campo-grupo">
+                <label>Mot de passe</label>
+                <input type="password" id="loginSenha" placeholder="••••••••">
+            </div>
+            <button class="btn btn-jaune" onclick="fazerLogin()">Se connecter</button>
+            <div id="msgLogin" class="mensagem"></div>
         </div>
-    </section>
 
-    <section class="passos-section" id="como-funciona">
-        <h2>Comment ça <span>marche</span> ?</h2>
-        <div class="grid-passos">
-            <div class="passo">
-                <div class="passo-num">01</div>
-                <h3>Choisissez un plan</h3>
-                <p>Sélectionnez le plan qui correspond à votre niveau actuel.</p>
+        <!-- Formulaire d'Inscription -->
+        <div id="form-cadastro" class="formulario">
+            <div class="campo-grupo">
+                <label>Nom complet</label>
+                <input type="text" id="cadNome" placeholder="Votre nom d'artiste">
             </div>
-            <div class="passo">
-                <div class="passo-num">02</div>
-                <h3>Envoyez votre musique</h3>
-                <p>Téléchargez votre fichier audio (MP3, WAV ou MP4).</p>
+            <div class="campo-grupo">
+                <label>E-mail</label>
+                <input type="email" id="cadEmail" placeholder="seu@email.com">
             </div>
-            <div class="passo">
-                <div class="passo-num">03</div>
-                <h3>Payez en sécurité</h3>
-                <p>Payez avec Multicaixa, Unitel Money ou virement bancaire.</p>
+            <div class="campo-grupo">
+                <label>Mot de passe</label>
+                <input type="password" id="cadSenha" placeholder="Créez un mot de passe sécurisé">
             </div>
-            <div class="passo">
-                <div class="passo-num">04</div>
-                <h3>Gagnez de l'argent</h3>
-                <p>Recevez 70% des revenus générés par vos écoutes et téléchargements.</p>
-            </div>
+            <button class="btn btn-rouge" onclick="fazerCadastro()">Créer mon compte</button>
+            <div id="msgCadastro" class="mensagem"></div>
         </div>
-    </section>
 
-    <section class="plans-section" id="plans">
-        <h2>Choisissez votre <span>plan</span></h2>
-        <p>Sans engagement. Annulez à tout moment.</p>
+        <a href="index.html" class="voltar-link">← Retour à l'accueil</a>
+    </div>
 
-        <div class="grid-plans">
-            <div class="card-plano">
-                <h3>Start</h3>
-                <div class="preco">Gratuit</div>
-                <ul>
-                    <li>Divulgation basique</li>
-                    <li>1 musique/mois</li>
-                    <li>Support par email</li>
-                </ul>
-                <a href="login.html" class="btn btn-contour">Choisir Start</a>
-            </div>
+    <!-- 1. On charge Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-            <div class="card-plano popular">
-                <div class="badge-popular">Populaire</div>
-                <h3>Viral</h3>
-                <div class="preco">25.000 <span>Kz/mois</span></div>
-                <ul>
-                    <li>10 musiques/mois</li>
-                    <li>Distribution automatique</li>
-                    <li>Support prioritaire 24/7</li>
-                </ul>
-                <a href="login.html" class="btn btn-rouge">Choisir Viral</a>
-            </div>
+        // 2. Vos vraies clés Firebase (copiées de votre capture)
+        const firebaseConfig = {
+            apiKey: "AIzaSyA7HeUqywxtrl36UxZrMBfkv-yGPIVLrI4",
+            authDomain: "dsk-muzik-pulse.firebaseapp.com",
+            projectId: "dsk-muzik-pulse",
+            storageBucket: "dsk-muzik-pulse.firebasestorage.app",
+            messagingSenderId: "1087273927994",
+            appId: "1:1087273927994:web:b4d484d84779e1c8733c03",
+            measurementId: "G-JJ6NNE8NK2"
+        };
 
-            <div class="card-plano">
-                <h3>Lenda</h3>
-                <div class="preco">40.000 <span>Kz/mois</span></div>
-                <ul>
-                    <li>Divulgation illimitée</li>
-                    <li>Gestionnaire dédié</li>
-                    <li>Mise en avant maximale</li>
-                </ul>
-                <a href="login.html" class="btn btn-jaune">Choisir Lenda</a>
-            </div>
-        </div>
-    </section>
+        // 3. On initialise Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-logo">
-                <img src="assets/images/logo-header.png" alt="DSK Muzik Pulse">
-                <p class="footer-desc">Le pouls de la musique angolaise. Partagez votre talent avec le monde.</p>
-            </div>
-            <div class="footer-col">
-                <h4>Plateforme</h4>
-                <ul>
-                    <li><a href="#plans">Plans</a></li>
-                    <li><a href="#como-funciona">Comment ça marche</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Contact</h4>
-                <ul>
-                    <li><a href="https://wa.me/244945125149">WhatsApp : +244 945 125 149</a></li>
-                    <li><a href="https://wa.me/244953047802">WhatsApp : +244 953 047 802</a></li>
-                    <li><a href="mailto:danielkilusisa@gmail.com">danielkilusisa@gmail.com</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Réseaux Sociaux</h4>
-                <ul>
-                    <li><a href="#">Facebook</a></li>
-                    <li><a href="#">Instagram</a></li>
-                    <li><a href="#">TikTok</a></li>
-                    <li><a href="#">YouTube</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            &copy; 2024 DSK Muzik Pulse. Tous droits réservés. Luanda, Angola.
-        </div>
-    </footer>
+        // 4. Les fonctions de connexion et d'inscription
+        window.fazerLogin = function() {
+            const email = document.getElementById('loginEmail').value;
+            const senha = document.getElementById('loginSenha').value;
+            const msg = document.getElementById('msgLogin');
 
+            signInWithEmailAndPassword(auth, email, senha)
+                .then((userCredential) => {
+                    msg.className = 'mensagem sucesso';
+                    msg.textContent = "Connexion réussie ! Redirection...";
+                    // On sauvegarde l'email pour la page suivante
+                    localStorage.setItem('dsk_nome_artista', userCredential.user.email);
+                    setTimeout(() => { window.location.href = 'minha-conta.html'; }, 1500);
+                })
+                .catch((error) => {
+                    msg.className = 'mensagem erro';
+                    msg.textContent = "Erreur : Email ou mot de passe incorrect.";
+                });
+        };
+
+        window.fazerCadastro = function() {
+            const nome = document.getElementById('cadNome').value;
+            const email = document.getElementById('cadEmail').value;
+            const senha = document.getElementById('cadSenha').value;
+            const msg = document.getElementById('msgCadastro');
+
+            createUserWithEmailAndPassword(auth, email, senha)
+                .then((userCredential) => {
+                    msg.className = 'mensagem sucesso';
+                    msg.textContent = "Compte créé avec succès !";
+                    localStorage.setItem('dsk_nome_artista', nome); // On sauvegarde le nom
+                    setTimeout(() => { window.location.href = 'minha-conta.html'; }, 1500);
+                })
+                .catch((error) => {
+                    msg.className = 'mensagem erro';
+                    msg.textContent = "Erreur : " + (error.code === 'auth/email-already-in-use' ? "Cet email est déjà utilisé." : "Mot de passe trop faible (6 caractères min).");
+                });
+        };
+
+        // Fonction pour changer d'onglet (Connexion/Inscription)
+        window.mudarTab = function(tipo) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('ativo'));
+            document.querySelectorAll('.formulario').forEach(form => form.classList.remove('ativo'));
+            if (tipo === 'login') {
+                document.querySelectorAll('.tab')[0].classList.add('ativo');
+                document.getElementById('form-login').classList.add('ativo');
+            } else {
+                document.querySelectorAll('.tab')[1].classList.add('ativo');
+                document.getElementById('form-cadastro').classList.add('ativo');
+            }
+        };
+    </script>
 </body>
-            </html>
+</html>
