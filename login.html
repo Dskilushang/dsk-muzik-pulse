@@ -3,258 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion | DSK Muzik Pulse</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="./assets/images/favicon.png">
-    
-    <!-- Police Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-
+    <title>Test Firebase</title>
     <style>
-        /* --- VARIABLES DE COULEURS --- */
-        :root {
-            --noir-profond: #0A0A0B;
-            --noir-carte: #151518;
-            --jaune-neon: #FFD700;
-            --rouge-neon: #FF0033;
-            --blanc: #FFFFFF;
-            --gris-texte: #A0A0A5;
-        }
-
-        /* --- RESET & BASE --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-body {
-    background-color: #0A0A0B !important;
-    color: #FFFFFF !important;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-};
-            /* Effet de lumière rouge et jaune en arrière-plan */
-            background: radial-gradient(circle at top right, rgba(255, 0, 51, 0.1) 0%, transparent 40%),
-                        radial-gradient(circle at bottom left, rgba(255, 215, 0, 0.05) 0%, transparent 40%);
-        }
-
-        a { text-decoration: none; color: inherit; }
-
-        /* --- BOÎTE DE CONNEXION --- */
-        .auth-container {
-            background-color: var(--noir-carte);
-            padding: 40px;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 420px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            position: relative;
-        }
-
-        .logo-top {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .logo-top img {
-            height: 50px;
-        }
-
-        /* --- ONGLETS (Connexion / Inscription) --- */
-        .tabs {
-            display: flex;
-            margin-bottom: 30px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .tab {
-            flex: 1;
-            padding: 15px;
-            text-align: center;
-            font-weight: 600;
-            cursor: pointer;
-            color: var(--gris-texte);
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .tab.ativo {
-            color: var(--blanc);
-            border-bottom: 2px solid var(--rouge-neon);
-        }
-
-        /* --- FORMULAIRES --- */
-        .formulario {
-            display: none;
-        }
-
-        .formulario.ativo {
-            display: block;
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .campo-grupo {
-            margin-bottom: 20px;
-        }
-
-        .campo-grupo label {
-            display: block;
-            font-size: 13px;
-            color: var(--gris-texte);
-            margin-bottom: 8px;
-        }
-
-        .campo-grupo input {
-            width: 100%;
-            padding: 14px;
-            background: var(--noir-profond);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: var(--blanc);
-            font-size: 15px;
-            outline: none;
-            transition: border 0.3s;
-        }
-
-        .campo-grupo input:focus {
-            border-color: var(--jaune-neon);
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
-        }
-
-        /* --- BOUTONS --- */
-        .btn {
-            width: 100%;
-            padding: 15px;
-            border-radius: 8px;
-            font-weight: 800;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-        }
-
-        .btn-jaune {
-            background-color: var(--jaune-neon);
-            color: var(--noir-profond);
-        }
-
-        .btn-jaune:hover {
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
-            transform: translateY(-2px);
-        }
-
-        .btn-rouge {
-            background-color: var(--rouge-neon);
-            color: var(--blanc);
-        }
-
-        .btn-rouge:hover {
-            box-shadow: 0 0 20px rgba(255, 0, 51, 0.6);
-            transform: translateY(-2px);
-        }
-
-        /* --- LIEN RETOUR --- */
-        .voltar-link {
-            display: block;
-            text-align: center;
-            margin-top: 25px;
-            font-size: 13px;
-            color: var(--gris-texte);
-            transition: color 0.3s;
-        }
-
-        .voltar-link:hover {
-            color: var(--blanc);
-        }
+        body { background-color: #0A0A0B; color: white; font-family: sans-serif; text-align: center; padding: 50px; }
+        button { padding: 15px 30px; font-size: 18px; background: #FFD700; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        #resultado { margin-top: 30px; font-size: 16px; padding: 20px; border-radius: 10px; word-wrap: break-word; }
+        .sucesso { background: #10B981; color: white; }
+        .erro { background: #FF0033; color: white; }
     </style>
 </head>
 <body>
+    <h1>Test de connexion Firebase</h1>
+    <p>Cliquez sur le bouton pour tester.</p>
+    <button onclick="testarCadastro()">Tester la création de compte</button>
+    <div id="resultado"></div>
 
-    <div class="auth-container">
-        <!-- Logo en haut -->
-        <div class="logo-top">
-            <img src="./assets/images/logo-header.png" alt="DSK Muzik Pulse">
-        </div>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
-        <!-- Onglets -->
-        <div class="tabs">
-            <div class="tab ativo" onclick="mudarTab('login')">Connexion</div>
-            <div class="tab" onclick="mudarTab('cadastro')">Inscription</div>
-        </div>
-
-        <!-- Formulaire de Connexion -->
-        <div id="form-login" class="formulario ativo">
-            <div class="campo-grupo">
-                <label>E-mail</label>
-                <input type="email" placeholder="seu@email.com">
-            </div>
-            <div class="campo-grupo">
-                <label>Mot de passe</label>
-                <input type="password" placeholder="••••••••">
-            </div>
-            <button class="btn btn-jaune">Se connecter</button>
-            <a href="#" style="display:block; text-align:center; margin-top:15px; font-size:12px; color:var(--gris-texte);">Mot de passe oublié ?</a>
-        </div>
-
-        <!-- Formulaire d'Inscription -->
-        <div id="form-cadastro" class="formulario">
-            <div class="campo-grupo">
-                <label>Nom complet</label>
-                <input type="text" placeholder="Votre nom d'artiste">
-            </div>
-            <div class="campo-grupo">
-                <label>E-mail</label>
-                <input type="email" placeholder="seu@email.com">
-            </div>
-            <div class="campo-grupo">
-                <label>Numéro de téléphone</label>
-                <input type="tel" placeholder="+244 9XX XXX XXX">
-            </div>
-            <div class="campo-grupo">
-                <label>Mot de passe</label>
-                <input type="password" placeholder="Créez un mot de passe sécurisé">
-            </div>
-            <button class="btn btn-rouge">Créer mon compte</button>
-        </div>
-
-        <!-- Lien pour retourner à l'accueil -->
-        <a href="index.html" class="voltar-link">← Retour à l'accueil</a>
-    </div>
-
-    <!-- LE JAVASCRIPT POUR LES ONGLETS -->
     <script>
-        function mudarTab(tipo) {
-            // 1. Gérer les classes des onglets (couleur)
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(tab => tab.classList.remove('ativo'));
-            
-            // 2. Cacher tous les formulaires
-            const formularios = document.querySelectorAll('.formulario');
-            formularios.forEach(form => form.classList.remove('ativo'));
+        var firebaseConfig = {
+            apiKey: "AIzaSyA7HeUqywxtrl36UxZrMBfkv-yGPIVLrI4",
+            authDomain: "dsk-muzik-pulse.firebaseapp.com",
+            projectId: "dsk-muzik-pulse",
+            storageBucket: "dsk-muzik-pulse.firebasestorage.app",
+            messagingSenderId: "1087273927994",
+            appId: "1:1087273927994:web:b4d484d84779e1c8733c03"
+        };
 
-            // 3. Afficher le bon onglet et le bon formulaire
-            if (tipo === 'login') {
-                tabs[0].classList.add('ativo');
-                document.getElementById('form-login').classList.add('ativo');
-            } else {
-                tabs[1].classList.add('ativo');
-                document.getElementById('form-cadastro').classList.add('ativo');
-            }
+        firebase.initializeApp(firebaseConfig);
+        var auth = firebase.auth();
+
+        function testarCadastro() {
+            var res = document.getElementById('resultado');
+            res.className = '';
+            res.innerHTML = '⏳ Envoi de la requête à Firebase...';
+
+            auth.createUserWithEmailAndPassword("test1234@dskmuzikpulse.com", "123456")
+                .then(function(user) {
+                    res.className = 'sucesso';
+                    res.innerHTML = '✅ SUCCÈS ! Firebase a répondu. Le compte test a été créé.';
+                })
+                .catch(function(error) {
+                    res.className = 'erro';
+                    res.innerHTML = '❌ ERREUR : ' + error.code + '<br>' + error.message;
+                });
         }
     </script>
-
 </body>
-  </html>
+</html>
