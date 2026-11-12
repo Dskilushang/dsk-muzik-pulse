@@ -29,20 +29,46 @@
         <button class="btn" onclick="loginAdmin()">Entrar no Painel</button>
     </div>
 
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
     <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyA7HeUqyxwtrL36UxZrMBfkq-yGPIVLrI4",
+            authDomain: "dsk-muzik-pulse.firebaseapp.com",
+            projectId: "dsk-muzik-pulse",
+            storageBucket: "dsk-muzik-pulse.firebasestorage.app",
+            messagingSenderId: "1087273927994",
+            appId: "1:1087273927994:web:b4d484d84779e1c8733c03"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        var auth = firebase.auth();
+
         function loginAdmin() {
             const email = document.getElementById('adminEmail').value;
             const senha = document.getElementById('adminSenha').value;
             const erro = document.getElementById('erro');
 
-            // IDENTIFIANTS ADMIN PROVISOIRES
-            if (email === "danielkilusisa@gmail.com" && senha === "Admin2024!") {
-                sessionStorage.setItem('dsk_admin_logado', 'true');
-                window.location.href = 'tableau-admin.html';
-            } else {
+            // 1. On vérifie d'abord si c'est bien VOTRE email d'admin
+            if (email !== "danielkilusisa@gmail.com") {
+                erro.textContent = "Accès réservé à l'administrateur.";
                 erro.style.display = 'block';
+                return;
             }
+
+            // 2. On demande à Firebase de vérifier le mot de passe
+            auth.signInWithEmailAndPassword(email, senha)
+                .then(function(userCredential) {
+                    sessionStorage.setItem('dsk_admin_logado', 'true');
+                    window.location.href = 'tableau-admin.html';
+                })
+                .catch(function(error) {
+                    erro.textContent = "Mot de passe incorrect.";
+                    erro.style.display = 'block';
+                });
         }
     </script>
 </body>
-  </html>
+</html>
