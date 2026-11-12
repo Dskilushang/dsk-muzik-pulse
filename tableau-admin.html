@@ -56,17 +56,16 @@
         <table class="tabela">
             <thead><tr><th>Email</th><th>Date d'inscription</th><th>Statut</th></tr></thead>
             <tbody id="listaArtistas">
-                <tr><td colspan="3" style="text-align: center; color: var(--gris); padding: 30px;">Chargement...</td></tr>
+                <tr><td colspan="3" style="text-align: center; color: var(--gris); padding: 30px;">Chargement des données...</td></tr>
             </tbody>
         </table>
     </main>
 
-    <!-- Firebase -->
+    <!-- Firebase v8 + Firestore -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <script>
-        // Sécurité Admin
         if (sessionStorage.getItem('dsk_admin_logado') !== 'true') {
             window.location.href = 'espace-admin.html';
         }
@@ -76,7 +75,6 @@
             window.location.href = 'espace-admin.html';
         }
 
-        // Configuration Firebase
         var firebaseConfig = {
             apiKey: "AIzaSyA7HeUqyxwtrL36UxZrMBfkq-yGPIVLrI4",
             authDomain: "dsk-muzik-pulse.firebaseapp.com",
@@ -87,24 +85,32 @@
         };
 
         firebase.initializeApp(firebaseConfig);
-        var db = firebase.firestore(); // Note : Firestore doit être activé dans Firebase
+        var db = firebase.firestore();
 
-        // Récupérer la liste des utilisateurs (Simulation via Auth si Firestore n'est pas prêt)
-        // Puisque nous n'avons pas encore de base de données pour stocker les profils, 
-        // nous allons juste afficher un message pour l'instant.
-        
-        // ⚠️ Pour voir les vrais utilisateurs, vous devez aller dans Firebase > Authentication.
-        // Ce code est prêt pour le jour où vous activerez Firestore.
-        
-        document.getElementById('listaArtistas').innerHTML = `
-            <tr>
-                <td colspan="3" style="text-align: center; color: var(--gris); padding: 30px;">
-                    Les utilisateurs sont enregistrés en toute sécurité dans <strong>Firebase > Authentication</strong>.<br><br>
-                    <a href="https://console.firebase.google.com/project/dsk-muzik-pulse/authentication/users" target="_blank" style="color: var(--jaune);">Cliquez ici pour voir la liste des artistes</a>
-                </td>
-            </tr>
-        `;
-        document.getElementById('totalArtistas').textContent = "1"; // Nous mettons 1 car vous êtes le premier inscrit
+        db.collection("artistes").get().then((querySnapshot) => {
+            let total = querySnapshot.size;
+            document.getElementById('totalArtistas').textContent = total;
+            
+            let html = '';
+            if (total === 0) {
+                html = '<tr><td colspan="3" style="text-align: center; color: var(--gris); padding: 30px;">Aucun artiste inscrit pour le moment.</td></tr>';
+            } else {
+                querySnapshot.forEach((doc) => {
+                    let artista = doc.data();
+                    let data = artista.dataCadastro ? new Date(artista.dataCadastro.seconds * 1000).toLocaleDateString('fr-FR') : '—';
+                    html += `
+                        <tr>
+                            <td>${artista.email}</td>
+                            <td>${data}</td>
+                            <td><span style="color: var(--vert);">Actif</span></td>
+                        </tr>
+                    `;
+                });
+            }
+            document.getElementById('listaArtistas').innerHTML = html;
+        }).catch((error) => {
+            document.getElementById('listaArtistas').innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--rouge); padding: 30px;">Erreur : ' + error.message + '</td></tr>';
+        });
     </script>
 </body>
-  </html>
+                    </html>
