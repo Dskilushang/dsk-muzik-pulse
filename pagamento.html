@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement | DSK Muzik Pulse</title>
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --noir: #0A0A0B; --carte: #151518; --jaune: #FFD700; --rouge: #FF0033; --blanc: #FFF; --gris: #A0A0A5; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--noir); color: var(--blanc); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        .payment-box { background: var(--carte); padding: 30px; border-radius: 20px; width: 100%; max-width: 400px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        .payment-box h2 { margin-bottom: 10px; }
+        .payment-box h2 span { color: var(--jaune); }
+        .payment-box p { color: var(--gris); font-size: 14px; margin-bottom: 20px; }
+        
+        .plan-info { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--jaune); }
+        .plan-info h3 { color: var(--jaune); font-size: 24px; }
+        
+        .metodo { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: 0.3s; border: 1px solid transparent; }
+        .metodo:hover { border-color: var(--jaune); }
+        .metodo img { width: 30px; }
+        
+        .btn { width: 100%; padding: 15px; border-radius: 8px; font-weight: 800; font-size: 16px; cursor: pointer; border: none; background: var(--rouge); color: var(--blanc); margin-top: 20px; transition: 0.3s; }
+        .btn:hover { box-shadow: 0 0 20px rgba(255, 0, 51, 0.6); }
+    </style>
+</head>
+<body>
+
+    <div class="payment-box">
+        <h2>Finaliser <span>Paiement</span></h2>
+        <p>Plan sélectionné :</p>
+        
+        <div class="plan-info">
+            <h3>Plan Viral</h3>
+            <p>25.000 Kz / mois</p>
+        </div>
+
+        <p>Choisissez votre méthode :</p>
+        <div class="metodo"><span>💳 Multicaixa Express</span></div>
+        <div class="metodo"><span>📱 Unitel Money</span></div>
+        <div class="metodo"><span>🏦 Virement Bancaire</span></div>
+
+        <button class="btn" onclick="pagar()">Confirmer le Paiement</button>
+        <a href="minha-conta.html" style="display:block; margin-top:15px; color:var(--gris); font-size:12px; text-decoration:none;">Annuler</a>
+    </div>
+
+    <script>
+        function pagar() {
+            alert("Paiement simulé avec succès ! Votre compte va être mis à jour.");
+            window.location.href = 'minha-conta.html';
+        }
+    </script>
+</body>
+  </html>
