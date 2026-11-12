@@ -89,25 +89,25 @@
         <a href="index.html" class="voltar-link">← Retour à l'accueil</a>
     </div>
 
-    <!-- Firebase v8 (plus stable sur mobile) -->
+    <!-- Firebase v8 (stable sur mobile) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
     <script>
-        // 1. LA CLÉ EXACTE (J'ai pris celle de votre capture précédente)
+        // CLÉ CORRIGÉE (Attention aux majuscules L et I)
         var firebaseConfig = {
-            apiKey: "AIzaSyA7HeUqywxtrl36UxZrMBfkv-yGPIVLrI4",
+            apiKey: "AIzaSyA7HeUqyxwtrL36UxZrMBfkq-yGPIVLrI4",
             authDomain: "dsk-muzik-pulse.firebaseapp.com",
             projectId: "dsk-muzik-pulse",
             storageBucket: "dsk-muzik-pulse.firebasestorage.app",
             messagingSenderId: "1087273927994",
-            appId: "1:1087273927994:web:b4d484d84779e1c8733c03"
+            appId: "1:1087273927994:web:b4d484d84779e1c8733c03",
+            measurementId: "G-JJ6NNE8NK2"
         };
 
         firebase.initializeApp(firebaseConfig);
         var auth = firebase.auth();
 
-        // 2. FONCTION DE CONNEXION
         function fazerLogin() {
             var email = document.getElementById('loginEmail').value;
             var senha = document.getElementById('loginSenha').value;
@@ -128,11 +128,10 @@
                 })
                 .catch(function(error) {
                     msg.className = 'mensagem erro';
-                    msg.textContent = "Erreur : Email ou mot de passe incorrect.";
+                    msg.textContent = "Erreur : " + error.message;
                 });
         }
 
-        // 3. FONCTION D'INSCRIPTION
         function fazerCadastro() {
             var nome = document.getElementById('cadNome').value;
             var email = document.getElementById('cadEmail').value;
@@ -154,17 +153,10 @@
                 })
                 .catch(function(error) {
                     msg.className = 'mensagem erro';
-                    if(error.code === 'auth/email-already-in-use') {
-                        msg.textContent = "Cet email est déjà utilisé.";
-                    } else if(error.code === 'auth/weak-password') {
-                        msg.textContent = "Mot de passe trop faible (6 caractères min).";
-                    } else {
-                        msg.textContent = "Erreur : " + error.message;
-                    }
+                    msg.textContent = "Erreur : " + error.message;
                 });
         }
 
-        // 4. CHANGER D'ONGLET
         function mudarTab(tipo) {
             document.querySelectorAll('.tab').forEach(function(tab) { tab.classList.remove('ativo'); });
             document.querySelectorAll('.formulario').forEach(function(form) { form.classList.remove('ativo'); });
@@ -178,4 +170,4 @@
         }
     </script>
 </body>
-            </html>
+</html>
