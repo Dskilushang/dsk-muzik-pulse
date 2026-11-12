@@ -89,12 +89,12 @@
         <a href="index.html" class="voltar-link">← Retour à l'accueil</a>
     </div>
 
-    <!-- Firebase v8 (stable sur mobile) -->
+    <!-- Firebase v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
     <script>
-        // CLÉ CORRIGÉE (Attention aux majuscules L et I)
+        // 🔥 CLÉ EXACTE COPIÉE DE VOTRE MESSAGE (Attention à la casse) 🔥
         var firebaseConfig = {
             apiKey: "AIzaSyA7HeUqyxwtrL36UxZrMBfkq-yGPIVLrI4",
             authDomain: "dsk-muzik-pulse.firebaseapp.com",
@@ -128,7 +128,7 @@
                 })
                 .catch(function(error) {
                     msg.className = 'mensagem erro';
-                    msg.textContent = "Erreur : " + error.message;
+                    msg.textContent = "Erreur : Email ou mot de passe incorrect.";
                 });
         }
 
@@ -170,4 +170,4 @@
         }
     </script>
 </body>
-</html>
+                    </html>
