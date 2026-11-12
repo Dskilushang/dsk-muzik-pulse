@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | DSK Muzik Pulse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --noir: #0A0A0B; --carte: #151518; --jaune: #FFD700; --rouge: #FF0033; --blanc: #FFF; --gris: #A0A0A5; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--noir); color: var(--blanc); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .box { background: var(--carte); padding: 40px; border-radius: 20px; width: 100%; max-width: 400px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        h2 { color: var(--rouge); margin-bottom: 20px; }
+        .campo { width: 100%; padding: 15px; margin-bottom: 15px; background: var(--noir); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--blanc); }
+        .btn { width: 100%; padding: 15px; border-radius: 8px; font-weight: 800; border: none; background: var(--rouge); color: var(--blanc); cursor: pointer; transition: 0.3s; }
+        .btn:hover { box-shadow: 0 0 20px rgba(255, 0, 51, 0.4); }
+        .erro { color: var(--rouge); font-size: 12px; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>🛡️ Accès Restreint</h2>
+        <p style="color: var(--gris); font-size: 12px; margin-bottom: 20px;">Panneau d'administration DSK</p>
+        
+        <div id="erro" class="erro">Identifiants incorrects.</div>
+        
+        <input type="email" id="adminEmail" class="campo" placeholder="Email Admin">
+        <input type="password" id="adminSenha" class="campo" placeholder="Mot de passe">
+        <button class="btn" onclick="loginAdmin()">Entrar no Painel</button>
+    </div>
+
+    <script>
+        function loginAdmin() {
+            const email = document.getElementById('adminEmail').value;
+            const senha = document.getElementById('adminSenha').value;
+            const erro = document.getElementById('erro');
+
+            // IDENTIFIANTS ADMIN PROVISOIRES
+            if (email === "danielkilusisa@gmail.com" && senha === "Admin2024!") {
+                sessionStorage.setItem('dsk_admin_logado', 'true');
+                window.location.href = 'tableau-admin.html';
+            } else {
+                erro.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+  </html>
