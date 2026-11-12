@@ -89,24 +89,24 @@
         <a href="index.html" class="voltar-link">← Retour à l'accueil</a>
     </div>
 
-    <!-- Firebase v8 -->
+    <!-- Firebase v8 + Firestore -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <script>
-        // 🔥 CLÉ EXACTE COPIÉE DE VOTRE MESSAGE (Attention à la casse) 🔥
         var firebaseConfig = {
             apiKey: "AIzaSyA7HeUqyxwtrL36UxZrMBfkq-yGPIVLrI4",
             authDomain: "dsk-muzik-pulse.firebaseapp.com",
             projectId: "dsk-muzik-pulse",
             storageBucket: "dsk-muzik-pulse.firebasestorage.app",
             messagingSenderId: "1087273927994",
-            appId: "1:1087273927994:web:b4d484d84779e1c8733c03",
-            measurementId: "G-JJ6NNE8NK2"
+            appId: "1:1087273927994:web:b4d484d84779e1c8733c03"
         };
 
         firebase.initializeApp(firebaseConfig);
         var auth = firebase.auth();
+        var db = firebase.firestore();
 
         function fazerLogin() {
             var email = document.getElementById('loginEmail').value;
@@ -128,7 +128,7 @@
                 })
                 .catch(function(error) {
                     msg.className = 'mensagem erro';
-                    msg.textContent = "Erreur : Email ou mot de passe incorrect.";
+                    msg.textContent = "Erreur : " + error.message;
                 });
         }
 
@@ -146,14 +146,28 @@
 
             auth.createUserWithEmailAndPassword(email, senha)
                 .then(function(userCredential) {
-                    msg.className = 'mensagem sucesso';
-                    msg.textContent = "Compte créé avec succès !";
-                    localStorage.setItem('dsk_nome_artista', nome);
-                    setTimeout(function() { window.location.href = 'minha-conta.html'; }, 1500);
+                    // Sauvegarde dans Firestore
+                    db.collection("artistes").doc(userCredential.user.uid).set({
+                        nome: nome,
+                        email: email,
+                        plano: "Start",
+                        dataCadastro: new Date(),
+                        saldo: 0
+                    })
+                    .then(function() {
+                        msg.className = 'mensagem sucesso';
+                        msg.textContent = "Compte créé avec succès !";
+                        localStorage.setItem('dsk_nome_artista', nome);
+                        setTimeout(function() { window.location.href = 'minha-conta.html'; }, 1500);
+                    })
+                    .catch(function(error) {
+                        msg.className = 'mensagem erro';
+                        msg.textContent = "Erreur Firestore : " + error.message;
+                    });
                 })
                 .catch(function(error) {
                     msg.className = 'mensagem erro';
-                    msg.textContent = "Erreur : " + error.message;
+                    msg.textContent = "Erreur Auth : " + error.message;
                 });
         }
 
@@ -170,4 +184,4 @@
         }
     </script>
 </body>
-                    </html>
+    </html>
