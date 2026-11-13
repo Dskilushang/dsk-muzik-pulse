@@ -51,6 +51,7 @@
 
         .btn-enviar { width: 100%; padding: 16px; border-radius: 8px; font-weight: 800; font-size: 16px; cursor: pointer; border: none; background: var(--rouge); color: var(--blanc); margin-top: 10px; transition: 0.3s; }
         .btn-enviar:hover { box-shadow: 0 0 20px rgba(255, 0, 51, 0.6); transform: translateY(-2px); }
+        .btn-enviar:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .tabela-musicas { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .tabela-musicas th { text-align: left; padding: 12px; color: var(--gris); font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
@@ -99,7 +100,7 @@
             </div>
         </div>
 
-        <!-- ABA 2: FORMULAIRE DE DIVULGAÇÃO -->
+        <!-- ABA 2: FORMULAIRE DE DIVULGAÇÃO (AVEC CLOUDINARY) -->
         <div id="aba-divulgacao" class="pagina">
             <div class="header-conta">
                 <h1>Nouvelle <span>Divulgation</span></h1>
@@ -144,7 +145,7 @@
                         <option>R&B</option>
                     </select>
                 </div>
-                <button type="submit" class="btn-enviar">Envoyer la Musique</button>
+                <button type="submit" id="btnEnviar" class="btn-enviar">Envoyer la Musique</button>
             </form>
         </div>
 
@@ -179,7 +180,10 @@
         var auth = firebase.auth();
         var db = firebase.firestore();
 
-        // Vérifier la connexion et charger les données
+        // --- CLOUDINARY CONFIGURATION ---
+        var CLOUDINARY_CLOUD_NAME = "wavqyy8";
+        var CLOUDINARY_UPLOAD_PRESET = "dsk_unsigned"; // Assurez-vous que ce preset existe et est "Unsigned"
+
         auth.onAuthStateChanged(function(user) {
             if (user) {
                 var nome = user.email.split('@')[0];
@@ -196,7 +200,8 @@
                         var html = '<table class="tabela-musicas"><tr><th>Musique</th><th>Genre</th><th>Statut</th></tr>';
                         querySnapshot.forEach((doc) => {
                             var m = doc.data();
-                            html += `<tr><td><strong>${m.titulo}</strong></td><td style="color:var(--gris);">${m.genero}</td><td><span style="background:rgba(255,215,0,0.1); color:var(--jaune); padding:4px 10px; border-radius:20px; font-size:12px;">${m.status}</span></td></tr>`;
+                            var corStatus = m.status === 'Approuvé' ? 'var(--vert)' : 'var(--jaune)';
+                            html += `<tr><td><strong>${m.titulo}</strong></td><td style="color:var(--gris);">${m.genero}</td><td><span style="color:${corStatus}; font-weight:bold;">${m.status}</span></td></tr>`;
                         });
                         html += '</table>';
                         listaDiv.innerHTML = html;
@@ -223,27 +228,77 @@
             if (input.files && input.files[0]) document.getElementById('capaNome').textContent = input.files[0].name;
         }
 
-        function enviarMusica(e) {
+        // --- LA FONCTION D'UPLOAD CLOUDINARY ---
+        async function enviarMusica(e) {
             e.preventDefault();
+            
+            var btn = document.getElementById('btnEnviar');
+            btn.disabled = true;
+            btn.textContent = "Envoi en cours... (patientez)";
+
             var titulo = document.getElementById('nomeMusica').value;
             var artista = document.getElementById('nomeArtistaInput').value;
             var genero = document.getElementById('genero').value;
+            var audioFile = document.getElementById('audioFile').files[0];
+            var capaFile = document.getElementById('capaFile').files[0];
             var user = firebase.auth().currentUser;
             
             if (!user) { alert("Vous devez être connecté."); return; }
+            if (!audioFile) { alert("Veuillez sélectionner un fichier audio."); return; }
 
-            db.collection("divulgacoes").add({
-                uid: user.uid, titulo: titulo, artista: artista, genero: genero, data: new Date(), status: "En attente"
-            })
-            .then(function() {
-                alert("Musique enregistrée avec succès !");
+            try {
+                // 1. Upload de l'audio sur Cloudinary
+                var formDataAudio = new FormData();
+                formDataAudio.append('file', audioFile);
+                formDataAudio.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+                var resAudio = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`, {
+                    method: 'POST',
+                    body: formDataAudio
+                });
+                var dataAudio = await resAudio.json();
+                
+                if(dataAudio.error) throw new Error("Erreur Cloudinary (Audio) : " + dataAudio.error.message);
+                var audioUrl = dataAudio.secure_url;
+
+                // 2. Upload de l'image sur Cloudinary (si elle existe)
+                var capaUrl = "";
+                if (capaFile) {
+                    var formDataCapa = new FormData();
+                    formDataCapa.append('file', capaFile);
+                    formDataCapa.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+                    var resCapa = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`, {
+                        method: 'POST',
+                        body: formDataCapa
+                    });
+                    var dataCapa = await resCapa.json();
+                    if(!dataCapa.error) capaUrl = dataCapa.secure_url;
+                }
+
+                // 3. Sauvegarde dans Firebase avec les VRAIES URLs
+                await db.collection("divulgacoes").add({
+                    uid: user.uid,
+                    titulo: titulo,
+                    artista: artista,
+                    genero: genero,
+                    audioUrl: audioUrl, // Lien réel du MP3
+                    capaUrl: capaUrl,   // Lien réel de l'image
+                    data: new Date(),
+                    status: "En attente"
+                });
+
+                alert("Musique et image uploadées avec succès !");
                 mudarAba('dashboard');
                 document.getElementById('nomeMusica').value = '';
                 document.getElementById('genero').value = '';
-                // Recharger la page pour voir la nouvelle musique
                 window.location.reload(); 
-            })
-            .catch(function(error) { alert("Erreur : " + error.message); });
+
+            } catch (error) {
+                alert("Erreur lors de l'envoi : " + error.message);
+                btn.disabled = false;
+                btn.textContent = "Envoyer la Musique";
+            }
         }
 
         function sair() {
@@ -251,4 +306,4 @@
         }
     </script>
 </body>
-    </html>
+            </html>
