@@ -89,7 +89,7 @@
         <a href="index.html" class="voltar-link">← Retour à l'accueil</a>
     </div>
 
-    <!-- Firebase v8 + Firestore -->
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -121,10 +121,18 @@
 
             auth.signInWithEmailAndPassword(email, senha)
                 .then(function(userCredential) {
-                    msg.className = 'mensagem sucesso';
-                    msg.textContent = "Connexion réussie ! Redirection...";
-                    localStorage.setItem('dsk_nome_artista', userCredential.user.email);
-                    setTimeout(function() { window.location.href = 'minha-conta.html'; }, 1500);
+                    // CRÉATION AUTOMATIQUE DU PROFIL S'IL N'EXISTE PAS
+                    db.collection("artistes").doc(userCredential.user.uid).set({
+                        email: userCredential.user.email,
+                        dataCadastro: new Date(),
+                        plano: "Start"
+                    }, { merge: true }) // merge: true évite d'écraser les données existantes
+                    .then(function() {
+                        msg.className = 'mensagem sucesso';
+                        msg.textContent = "Connexion réussie ! Redirection...";
+                        localStorage.setItem('dsk_nome_artista', userCredential.user.email);
+                        setTimeout(function() { window.location.href = 'minha-conta.html'; }, 1500);
+                    });
                 })
                 .catch(function(error) {
                     msg.className = 'mensagem erro';
@@ -146,7 +154,6 @@
 
             auth.createUserWithEmailAndPassword(email, senha)
                 .then(function(userCredential) {
-                    // Sauvegarde dans Firestore
                     db.collection("artistes").doc(userCredential.user.uid).set({
                         nome: nome,
                         email: email,
@@ -159,15 +166,11 @@
                         msg.textContent = "Compte créé avec succès !";
                         localStorage.setItem('dsk_nome_artista', nome);
                         setTimeout(function() { window.location.href = 'minha-conta.html'; }, 1500);
-                    })
-                    .catch(function(error) {
-                        msg.className = 'mensagem erro';
-                        msg.textContent = "Erreur Firestore : " + error.message;
                     });
                 })
                 .catch(function(error) {
                     msg.className = 'mensagem erro';
-                    msg.textContent = "Erreur Auth : " + error.message;
+                    msg.textContent = "Erreur : " + error.message;
                 });
         }
 
@@ -184,4 +187,4 @@
         }
     </script>
 </body>
-    </html>
+</html>
