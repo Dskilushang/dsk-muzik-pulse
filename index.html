@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,10 +42,10 @@
         .secao-musicas h2 span { color: var(--rouge-neon); }
         .grid-musicas { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
         
-        .card-musica { background: var(--noir-carte); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 15px; transition: 0.3s; }
+        .card-musica { background: var(--noir-carte); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 15px; transition: 0.3s; user-select: none; }
         .card-musica:hover { border-color: var(--jaune-neon); transform: translateY(-5px); }
         
-        .capa-musica { width: 100%; aspect-ratio: 1/1; background: linear-gradient(135deg, #333, #111); border-radius: 12px; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; }
+        .capa-musica { width: 100%; aspect-ratio: 1/1; background: linear-gradient(135deg, #333, #111); border-radius: 12px; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; background-size: cover; background-position: center; }
         .capa-musica i { font-size: 60px; color: rgba(255,255,255,0.1); }
         
         .info-musica h3 { font-size: 18px; margin-bottom: 5px; }
@@ -53,8 +53,12 @@
         .tag-genero { display: inline-block; background: rgba(255, 215, 0, 0.1); color: var(--jaune-neon); padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-top: 8px; }
         
         .player-audio { width: 100%; margin-top: 10px; }
+        
         .acoes-musica { display: flex; gap: 10px; margin-top: 10px; }
         .acoes-musica .btn { flex: 1; padding: 8px; font-size: 13px; }
+
+        .btn-profil { background: rgba(255,255,255,0.1); color: var(--blanc); padding: 5px 12px; border-radius: 6px; font-size: 11px; border: 1px solid rgba(255,255,255,0.2); display: inline-block; margin-top: 5px; }
+        .btn-profil:hover { background: var(--jaune-neon); color: var(--noir-profond); border-color: var(--jaune-neon); }
 
         .plans-section { padding: 100px 40px; text-align: center; background: var(--noir-profond); }
         .plans-section h2 { font-size: 2.5rem; margin-bottom: 10px; }
@@ -83,6 +87,18 @@
         .footer-col a { color: var(--gris-texte); font-size: 0.9rem; transition: color 0.3s; }
         .footer-col a:hover { color: var(--jaune-neon); }
         .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); color: var(--gris-texte); font-size: 0.8rem; }
+
+        /* --- MODAL MIMOS (NOUVEAU) --- */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s; }
+        .modal-overlay.ativo { opacity: 1; visibility: visible; }
+        .modal-box { background: var(--noir-carte); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; border: 1px solid var(--jaune-neon); text-align: center; position: relative; }
+        .fechar-modal { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: var(--gris-texte); }
+        .fechar-modal:hover { color: var(--blanc); }
+        .modal-box h2 { color: var(--jaune-neon); margin-bottom: 10px; }
+        .modal-box p { color: var(--gris-texte); font-size: 14px; margin-bottom: 20px; }
+        .modal-box .metodo { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.1); text-align: left; }
+        .modal-box .metodo strong { color: var(--blanc); display: block; font-size: 14px; }
+        .modal-box .metodo span { color: var(--jaune-neon); font-size: 16px; font-weight: 800; word-break: break-all; }
 
         @media (max-width: 900px) {
             header { flex-direction: column; padding: 20px; gap: 20px; }
@@ -141,7 +157,6 @@
                 <h3>Start</h3>
                 <div class="preco">Gratuit</div>
                 <ul><li>Divulgation basique</li><li>1 musique/mois</li><li>Support par email</li></ul>
-                <!-- LE LIEN EST MODIFIÉ ICI -->
                 <a href="pagamento.html?plano=start" class="btn btn-contour">Choisir Start</a>
             </div>
             <div class="card-plano popular">
@@ -149,14 +164,12 @@
                 <h3>Viral</h3>
                 <div class="preco">25.000 <span>Kz/mois</span></div>
                 <ul><li>10 musiques/mois</li><li>Distribution automatique</li><li>Support prioritaire 24/7</li></ul>
-                <!-- LE LIEN EST MODIFIÉ ICI -->
                 <a href="pagamento.html?plano=viral" class="btn btn-rouge">Choisir Viral</a>
             </div>
             <div class="card-plano">
                 <h3>Lenda</h3>
                 <div class="preco">40.000 <span>Kz/mois</span></div>
                 <ul><li>Divulgation illimitée</li><li>Gestionnaire dédié</li><li>Mise en avant maximale</li></ul>
-                <!-- LE LIEN EST MODIFIÉ ICI -->
                 <a href="pagamento.html?plano=lenda" class="btn btn-jaune">Choisir Lenda</a>
             </div>
         </div>
@@ -181,6 +194,25 @@
             &copy; 2024 DSK Muzik Pulse. Tous droits réservés. Luanda, Angola.
         </div>
     </footer>
+
+    <!-- MODAL MIMOS (NOUVEAU) -->
+    <div class="modal-overlay" id="modalMimo">
+        <div class="modal-box">
+            <span class="fechar-modal" onclick="fecharModal()">&times;</span>
+            <h2>Envoyer un Mimo 🎁</h2>
+            <p>Envoyez un pourboire à <strong id="nomeArtistaMimo" style="color:var(--blanc);">l'artiste</strong> pour soutenir son travail.</p>
+            
+            <div class="metodo">
+                <strong>Unitel Money / Afrimoney</strong>
+                <span>945 125 149 (Nkilusisa Salomão Lutati)</span>
+            </div>
+            <div class="metodo">
+                <strong>Virement Bancaire (Atlântico)</strong>
+                <span style="font-size:12px;">AO06.0055.0000.2163.9118.1011.7</span>
+            </div>
+            <p style="font-size:11px; margin-top:15px; color:var(--jaune);">* Envoyez 500 ou 1.000 Kz et envoyez la capture au WhatsApp de l'artiste.</p>
+        </div>
+    </div>
 
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -212,23 +244,30 @@
                 let html = '';
                 querySnapshot.forEach((doc) => {
                     let m = doc.data();
-                    let audioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"; 
+                    let styleCapa = m.capaUrl ? `background-image: url('${m.capaUrl}');` : '';
+                    let iconeCapa = m.capaUrl ? '' : '<i class="bi bi-music-note-beamed"></i>';
+                    let lienAudio = m.audioUrl ? m.audioUrl : "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
 
+                    // NOUVEAU : On ajoute le bouton "Soutenir" avec l'appel à la fonction abrirMimo()
                     html += `
                         <div class="card-musica">
-                            <div class="capa-musica">
-                                <i class="bi bi-music-note-beamed"></i>
+                            <div class="capa-musica" style="${styleCapa}">
+                                ${iconeCapa}
                             </div>
                             <div class="info-musica">
                                 <h3>${m.titulo}</h3>
-                                <p>${m.artista}</p>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+                                    <p style="margin: 0;">${m.artista}</p>
+                                    <a href="artista.html?nome=${m.artista}" class="btn-profil">Voir Profil</a>
+                                </div>
                                 <span class="tag-genero">${m.genero}</span>
                             </div>
                             <audio controls class="player-audio">
-                                <source src="${audioUrl}" type="audio/mpeg">
+                                <source src="${lienAudio}" type="audio/mpeg">
                             </audio>
                             <div class="acoes-musica">
-                                <a href="${audioUrl}" download class="btn btn-jaune"><i class="bi bi-download"></i> Télécharger</a>
+                                <a href="${lienAudio}" download class="btn btn-jaune"><i class="bi bi-download"></i> Télécharger</a>
+                                <button class="btn btn-rouge" onclick="abrirMimo('${m.artista}')"><i class="bi bi-gift-fill"></i> Soutenir</button>
                             </div>
                         </div>
                     `;
@@ -238,6 +277,21 @@
         }).catch((error) => {
             grid.innerHTML = '<p style="text-align: center; width: 100%; color: var(--rouge-neon);">Erreur de chargement des musiques.</p>';
         });
+
+        // Fonctions pour le Modal Mimo
+        function abrirMimo(nomeArtista) {
+            document.getElementById('nomeArtistaMimo').textContent = nomeArtista;
+            document.getElementById('modalMimo').classList.add('ativo');
+        }
+
+        function fecharModal() {
+            document.getElementById('modalMimo').classList.remove('ativo');
+        }
+
+        // Fermer si on clique en dehors
+        document.getElementById('modalMimo').addEventListener('click', function(e) {
+            if (e.target === this) fecharModal();
+        });
     </script>
 </body>
-    </html>
+                                                                                                     </html>
