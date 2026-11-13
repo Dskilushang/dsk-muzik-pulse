@@ -12,20 +12,23 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background-color: var(--noir); color: var(--blanc); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         
-        .payment-box { background: var(--carte); padding: 30px; border-radius: 20px; width: 100%; max-width: 400px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        .payment-box { background: var(--carte); padding: 40px; border-radius: 20px; width: 100%; max-width: 450px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
         .payment-box h2 { margin-bottom: 10px; }
         .payment-box h2 span { color: var(--jaune); }
         .payment-box p { color: var(--gris); font-size: 14px; margin-bottom: 20px; }
         
-        .plan-info { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--jaune); }
-        .plan-info h3 { color: var(--jaune); font-size: 24px; }
+        .plan-info { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; margin-bottom: 25px; border: 1px solid var(--jaune); }
+        .plan-info h3 { color: var(--jaune); font-size: 28px; }
         
-        .metodo { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: 0.3s; border: 1px solid transparent; }
+        .metodo { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: 0.3s; border: 1px solid transparent; }
         .metodo:hover { border-color: var(--jaune); }
-        .metodo img { width: 30px; }
+        .metodo span { font-weight: 600; }
         
         .btn { width: 100%; padding: 15px; border-radius: 8px; font-weight: 800; font-size: 16px; cursor: pointer; border: none; background: var(--rouge); color: var(--blanc); margin-top: 20px; transition: 0.3s; }
         .btn:hover { box-shadow: 0 0 20px rgba(255, 0, 51, 0.6); }
+        
+        .voltar { display: block; margin-top: 20px; color: var(--gris); font-size: 13px; text-decoration: none; }
+        .voltar:hover { color: var(--blanc); }
     </style>
 </head>
 <body>
@@ -35,24 +38,83 @@
         <p>Plan sélectionné :</p>
         
         <div class="plan-info">
-            <h3>Plan Viral</h3>
-            <p>25.000 Kz / mois</p>
+            <h3 id="nomePlano">Plan Viral</h3>
+            <p id="precoPlano">25.000 Kz / mois</p>
         </div>
 
         <p>Choisissez votre méthode :</p>
-        <div class="metodo"><span>💳 Multicaixa Express</span></div>
-        <div class="metodo"><span>📱 Unitel Money</span></div>
-        <div class="metodo"><span>🏦 Virement Bancaire</span></div>
+        <div class="metodo" onclick="selecionarMetodo(this)"><span>💳 Multicaixa Express</span></div>
+        <div class="metodo" onclick="selecionarMetodo(this)"><span>📱 Unitel Money</span></div>
+        <div class="metodo" onclick="selecionarMetodo(this)"><span>🏦 Virement Bancaire</span></div>
 
-        <button class="btn" onclick="pagar()">Confirmer le Paiement</button>
-        <a href="minha-conta.html" style="display:block; margin-top:15px; color:var(--gris); font-size:12px; text-decoration:none;">Annuler</a>
+        <button class="btn" id="btnPagar" onclick="pagar()">Confirmer le Paiement</button>
+        <a href="minha-conta.html" class="voltar">← Retour au tableau de bord</a>
     </div>
 
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
     <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyA7HeUqyxwtrL36UxZrMBfkq-yGPIVLrI4",
+            authDomain: "dsk-muzik-pulse.firebaseapp.com",
+            projectId: "dsk-muzik-pulse",
+            storageBucket: "dsk-muzik-pulse.firebasestorage.app",
+            messagingSenderId: "1087273927994",
+            appId: "1:1087273927994:web:b4d484d84779e1c8733c03"
+        };
+        firebase.initializeApp(firebaseConfig);
+        var auth = firebase.auth();
+        var db = firebase.firestore();
+
+        // 1. Récupérer le plan depuis l'URL (ex: pagamento.html?plano=viral)
+        var urlParams = new URLSearchParams(window.location.search);
+        var planoId = urlParams.get('plano') || 'viral'; // Par défaut Viral
+
+        // 2. Afficher les infos du plan
+        var planos = {
+            'start': { nome: 'Start', preco: 'Gratuit' },
+            'viral': { nome: 'Viral', preco: '25.000 Kz / mois' },
+            'lenda': { nome: 'Lenda', preco: '40.000 Kz / mois' }
+        };
+
+        var planoAtual = planos[planoId] || planos['viral'];
+        document.getElementById('nomePlano').textContent = "Plan " + planoAtual.nome;
+        document.getElementById('precoPlano').textContent = planoAtual.preco;
+
+        // Gérer la sélection visuelle du bouton
+        function selecionarMetodo(elemento) {
+            document.querySelectorAll('.metodo').forEach(m => m.style.borderColor = 'transparent');
+            elemento.style.borderColor = 'var(--jaune)';
+        }
+
+        // 3. Fonction de paiement (met à jour Firebase)
         function pagar() {
-            alert("Paiement simulé avec succès ! Votre compte va être mis à jour.");
-            window.location.href = 'minha-conta.html';
+            var user = auth.currentUser;
+            if (!user) {
+                alert("Vous devez être connecté pour payer.");
+                window.location.href = 'login.html';
+                return;
+            }
+
+            var btn = document.getElementById('btnPagar');
+            btn.textContent = "Traitement en cours...";
+            btn.disabled = true;
+
+            // On met à jour le plan de l'artiste dans la collection "artistes"
+            db.collection("artistes").doc(user.uid).update({
+                plano: planoAtual.nome
+            }).then(function() {
+                alert("Paiement simulé avec succès ! Votre compte est maintenant au Plan " + planoAtual.nome);
+                window.location.href = 'minha-conta.html';
+            }).catch(function(error) {
+                alert("Erreur lors de la mise à jour : " + error.message);
+                btn.textContent = "Confirmer le Paiement";
+                btn.disabled = false;
+            });
         }
     </script>
 </body>
-  </html>
+                                                                 </html>
