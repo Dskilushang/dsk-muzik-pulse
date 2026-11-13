@@ -211,15 +211,41 @@
 
         // Enviar Musica (Simulação por enquanto)
         function enviarMusica(e) {
-            e.preventDefault();
-            alert("Musique envoyée avec succès ! (Simulation)\n\nDans la prochaine étape, nous l'enverrons vraiment sur Firebase Storage.");
-            mudarAba('dashboard');
-        }
+    e.preventDefault();
+    
+    // On récupère les infos du formulaire
+    var titulo = document.getElementById('nomeMusica').value;
+    var artista = document.getElementById('nomeArtistaInput').value;
+    var genero = document.getElementById('genero').value;
+    
+    // On récupère l'utilisateur connecté
+    var user = firebase.auth().currentUser;
+    
+    if (!user) {
+        alert("Vous devez être connecté.");
+        return;
+    }
 
-        // Sair
-        function sair() {
-            auth.signOut().then(function() { window.location.href = 'index.html'; });
-        }
+    // On enregistre dans Firestore (collection "divulgacoes")
+    db.collection("divulgacoes").add({
+        uid: user.uid,
+        titulo: titulo,
+        artista: artista,
+        genero: genero,
+        data: new Date(),
+        status: "En attente" // L'admin devra valider
+    })
+    .then(function() {
+        alert("Musique enregistrée avec succès ! Elle apparaîtra dans votre tableau de bord.");
+        mudarAba('dashboard');
+        // On vide le formulaire
+        document.getElementById('nomeMusica').value = '';
+        document.getElementById('genero').value = '';
+    })
+    .catch(function(error) {
+        alert("Erreur : " + error.message);
+    });
+    }
     </script>
 </body>
     </html>
