@@ -10,44 +10,72 @@
     <style>
         :root { --noir: #0A0A0B; --carte: #151518; --jaune: #FFD700; --rouge: #FF0033; --blanc: #FFF; --gris: #A0A0A5; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: var(--noir); color: var(--blanc); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        body { background-color: var(--noir); color: var(--blanc); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         
-        .payment-box { background: var(--carte); padding: 40px; border-radius: 20px; width: 100%; max-width: 450px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        .payment-box { background: var(--carte); padding: 30px; border-radius: 20px; width: 100%; max-width: 450px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
         .payment-box h2 { margin-bottom: 10px; }
         .payment-box h2 span { color: var(--jaune); }
-        .payment-box p { color: var(--gris); font-size: 14px; margin-bottom: 20px; }
         
-        .plan-info { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; margin-bottom: 25px; border: 1px solid var(--jaune); }
-        .plan-info h3 { color: var(--jaune); font-size: 28px; }
+        .plan-info { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--jaune); }
+        .plan-info h3 { color: var(--jaune); font-size: 24px; }
         
-        .metodo { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: 0.3s; border: 1px solid transparent; }
+        .metodo { display: flex; flex-direction: column; align-items: flex-start; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: 0.3s; border: 1px solid transparent; text-align: left; }
         .metodo:hover { border-color: var(--jaune); }
-        .metodo span { font-weight: 600; }
+        .metodo.ativo { border-color: var(--jaune); background: rgba(255, 215, 0, 0.1); }
+        .metodo strong { font-size: 15px; margin-bottom: 5px; display: block; }
+        .metodo span { font-size: 12px; color: var(--gris); }
         
+        .detalhe-pagamento { display: none; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin-top: 10px; font-size: 13px; border: 1px solid rgba(255,255,255,0.1); text-align: left; }
+        .detalhe-pagamento.ativo { display: block; }
+        .detalhe-pagamento p { color: var(--blanc); margin-bottom: 5px; }
+        .detalhe-pagamento strong { color: var(--jaune); font-size: 16px; word-break: break-all; }
+
         .btn { width: 100%; padding: 15px; border-radius: 8px; font-weight: 800; font-size: 16px; cursor: pointer; border: none; background: var(--rouge); color: var(--blanc); margin-top: 20px; transition: 0.3s; }
         .btn:hover { box-shadow: 0 0 20px rgba(255, 0, 51, 0.6); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
         
         .voltar { display: block; margin-top: 20px; color: var(--gris); font-size: 13px; text-decoration: none; }
-        .voltar:hover { color: var(--blanc); }
     </style>
 </head>
 <body>
 
     <div class="payment-box">
         <h2>Finaliser <span>Paiement</span></h2>
-        <p>Plan sélectionné :</p>
+        <p style="color: var(--gris); font-size: 14px; margin-bottom: 15px;">Plan sélectionné :</p>
         
         <div class="plan-info">
             <h3 id="nomePlano">Plan Viral</h3>
-            <p id="precoPlano">25.000 Kz / mois</p>
+            <p id="precoPlano" style="color: var(--gris);">25.000 Kz / mois</p>
         </div>
 
-        <p>Choisissez votre méthode :</p>
-        <div class="metodo" onclick="selecionarMetodo(this)"><span>💳 Multicaixa Express</span></div>
-        <div class="metodo" onclick="selecionarMetodo(this)"><span>📱 Unitel Money</span></div>
-        <div class="metodo" onclick="selecionarMetodo(this)"><span>🏦 Virement Bancaire</span></div>
+        <p style="color: var(--gris); font-size: 14px; margin-bottom: 10px;">Choisissez votre méthode :</p>
+        
+        <!-- LES METHODES DE PAIEMENT AVEC VOS DONNÉES -->
+        <div class="metodo" onclick="selecionarMetodo(this, 'Unitel Money', '945 125 149', 'Nkilusisa Salomão Lutati')">
+            <strong>📱 Unitel Money</strong>
+            <span>Paiement rapide via téléphone</span>
+        </div>
 
-        <button class="btn" id="btnPagar" onclick="pagar()">Confirmer le Paiement</button>
+        <div class="metodo" onclick="selecionarMetodo(this, 'Afrimoney', '945 125 149', 'Nkilusisa Salomão Lutati')">
+            <strong>💳 Afrimoney</strong>
+            <span>Paiement via Afrimoney</span>
+        </div>
+
+        <!-- NOUVEL IBAN ATLANTICO ICI -->
+        <div class="metodo" onclick="selecionarMetodo(this, 'Virement / Multicaixa', 'AO06.0055.0000.2163.9118.1011.7 (Atlântico)', 'Nkilusisa Salomão Lutati')">
+            <strong>🏦 Virement Bancaire (Atlântico)</strong>
+            <span>Multicaixa Express ou Virement</span>
+        </div>
+
+        <!-- ZONE QUI S'AFFICHE QUAND ON CLIQUE SUR UNE METHODE -->
+        <div id="detalhePagamento" class="detalhe-pagamento">
+            <p>Envoyez le montant à :</p>
+            <p><strong id="numeroPagamento">-</strong></p>
+            <p style="margin-top: 10px;">Au nom de : <strong id="titularPagamento">-</strong></p>
+            <p style="font-size: 11px; color: var(--rouge); margin-top: 10px;">* Après le transfert, cliquez sur le bouton ci-dessous.</p>
+        </div>
+
+        <button class="btn" id="btnPagar" onclick="pagar()" disabled>Confirmer le Paiement</button>
         <a href="minha-conta.html" class="voltar">← Retour au tableau de bord</a>
     </div>
 
@@ -69,11 +97,9 @@
         var auth = firebase.auth();
         var db = firebase.firestore();
 
-        // 1. Récupérer le plan depuis l'URL (ex: pagamento.html?plano=viral)
         var urlParams = new URLSearchParams(window.location.search);
-        var planoId = urlParams.get('plano') || 'viral'; // Par défaut Viral
+        var planoId = urlParams.get('plano') || 'viral';
 
-        // 2. Afficher les infos du plan
         var planos = {
             'start': { nome: 'Start', preco: 'Gratuit' },
             'viral': { nome: 'Viral', preco: '25.000 Kz / mois' },
@@ -84,13 +110,23 @@
         document.getElementById('nomePlano').textContent = "Plan " + planoAtual.nome;
         document.getElementById('precoPlano').textContent = planoAtual.preco;
 
-        // Gérer la sélection visuelle du bouton
-        function selecionarMetodo(elemento) {
-            document.querySelectorAll('.metodo').forEach(m => m.style.borderColor = 'transparent');
-            elemento.style.borderColor = 'var(--jaune)';
+        function selecionarMetodo(elemento, nome, numero, titular) {
+            // Retire la surbrillance de tous les boutons
+            document.querySelectorAll('.metodo').forEach(m => m.classList.remove('ativo'));
+            // Ajoute la surbrillance au bouton cliqué
+            elemento.classList.add('ativo');
+            
+            // Affiche les détails
+            document.getElementById('detalhePagamento').classList.add('ativo');
+            document.getElementById('numeroPagamento').textContent = numero;
+            document.getElementById('titularPagamento').textContent = titular;
+            
+            // Active le bouton de confirmation
+            var btn = document.getElementById('btnPagar');
+            btn.disabled = false;
+            btn.textContent = "J'ai effectué le paiement";
         }
 
-        // 3. Fonction de paiement (met à jour Firebase)
         function pagar() {
             var user = auth.currentUser;
             if (!user) {
@@ -100,21 +136,25 @@
             }
 
             var btn = document.getElementById('btnPagar');
-            btn.textContent = "Traitement en cours...";
+            btn.textContent = "Vérification...";
             btn.disabled = true;
 
-            // On met à jour le plan de l'artiste dans la collection "artistes"
-            db.collection("artistes").doc(user.uid).update({
-                plano: planoAtual.nome
-            }).then(function() {
-                alert("Paiement simulé avec succès ! Votre compte est maintenant au Plan " + planoAtual.nome);
+            // On met à jour le plan de l'artiste dans la base de données
+            db.collection("artistes").doc(user.uid).set({
+                plano: planoAtual.nome,
+                email: user.email,
+                dataPagamento: new Date(),
+                statusPagamento: "En attente de validation"
+            }, { merge: true })
+            .then(function() {
+                alert("Merci ! Votre demande est enregistrée. L'administrateur va vérifier la réception de votre paiement et activera votre plan.");
                 window.location.href = 'minha-conta.html';
             }).catch(function(error) {
                 alert("Erreur lors de la mise à jour : " + error.message);
-                btn.textContent = "Confirmer le Paiement";
+                btn.textContent = "J'ai effectué le paiement";
                 btn.disabled = false;
             });
         }
     </script>
 </body>
-                                                                 </html>
+            </html>
