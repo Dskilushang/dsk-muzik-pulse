@@ -26,7 +26,7 @@
         .btn-contour { background: transparent; border: 2px solid var(--blanc); color: var(--blanc); }
         .btn-contour:hover { border-color: var(--jaune-neon); color: var(--jaune-neon); }
 
-        .hero { display: flex; align-items: center; justify-content: space-between; padding: 80px 40px; min-height: 70vh; background: radial-gradient(circle at top right, rgba(255, 0, 51, 0.1) 0%, transparent 50%); }
+        .hero { display: flex; align-items: center; justify-content: space-between; padding: 80px 40px; min-height: 60vh; background: radial-gradient(circle at top right, rgba(255, 0, 51, 0.1) 0%, transparent 50%); }
         .hero-content { max-width: 600px; }
         .hero-content h1 { font-size: 3.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 20px; }
         .hero-content h1 span { color: var(--jaune-neon); text-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
@@ -35,7 +35,27 @@
         .hero-image img { width: 400px; animation: flotter 6s ease-in-out infinite; }
         @keyframes flotter { 0% { transform: translateY(0px); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0px); } }
 
-        .plans-section { padding: 100px 40px; text-align: center; background: #0d0d0f; }
+        /* NOUVELLE SECTION : ÉCOUTER LES MUSIQUES */
+        .secao-musicas { padding: 80px 40px; background: #0d0d0f; }
+        .secao-musicas h2 { text-align: center; font-size: 2.5rem; margin-bottom: 40px; }
+        .secao-musicas h2 span { color: var(--rouge-neon); }
+        .grid-musicas { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
+        
+        .card-musica { background: var(--noir-carte); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 15px; transition: 0.3s; }
+        .card-musica:hover { border-color: var(--jaune-neon); transform: translateY(-5px); }
+        
+        .capa-musica { width: 100%; aspect-ratio: 1/1; background: linear-gradient(135deg, #333, #111); border-radius: 12px; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; }
+        .capa-musica i { font-size: 60px; color: rgba(255,255,255,0.1); }
+        
+        .info-musica h3 { font-size: 18px; margin-bottom: 5px; }
+        .info-musica p { font-size: 13px; color: var(--gris-texte); }
+        .tag-genero { display: inline-block; background: rgba(255, 215, 0, 0.1); color: var(--jaune-neon); padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-top: 8px; }
+        
+        .player-audio { width: 100%; margin-top: 10px; }
+        .acoes-musica { display: flex; gap: 10px; margin-top: 10px; }
+        .acoes-musica .btn { flex: 1; padding: 8px; font-size: 13px; }
+
+        .plans-section { padding: 100px 40px; text-align: center; background: var(--noir-profond); }
         .plans-section h2 { font-size: 2.5rem; margin-bottom: 10px; }
         .plans-section h2 span { color: var(--jaune-neon); }
         .plans-section > p { color: var(--gris-texte); margin-bottom: 50px; }
@@ -70,7 +90,7 @@
             .hero-content h1 { font-size: 2.5rem; }
             .hero-buttons { justify-content: center; flex-direction: column; }
             .hero-image img { width: 250px; margin-top: 50px; }
-            .plans-section { padding: 50px 20px; }
+            .plans-section, .secao-musicas { padding: 50px 20px; }
             .footer-grid { flex-direction: column; }
         }
     </style>
@@ -84,6 +104,7 @@
         <nav>
             <ul>
                 <li><a href="#accueil">Accueil</a></li>
+                <li><a href="#ouvir">Écouter</a></li>
                 <li><a href="#plans">Plans</a></li>
             </ul>
         </nav>
@@ -95,11 +116,21 @@
             <h1>Le pouls de la <span>musique</span> angolaise.</h1>
             <p>La plateforme ultime pour les artistes indépendants. Partagez votre musique et gagnez de l'argent réel.</p>
             <div class="hero-buttons">
-                <a href="#plans" class="btn btn-jaune">Commencer maintenant</a>
+                <a href="#plans" class="btn btn-jaune">Devenir Artiste</a>
+                <a href="#ouvir" class="btn btn-contour">Écouter les hits</a>
             </div>
         </div>
         <div class="hero-image">
             <img src="assets/images/icone-application.png" alt="Icône DSK">
+        </div>
+    </section>
+
+    <!-- NOUVELLE SECTION : LES FANS ÉCOUTENT ET TÉLÉCHARGENT -->
+    <section class="secao-musicas" id="ouvir">
+        <h2>Écoutez les <span>Derniers Hits</span></h2>
+        <div class="grid-musicas" id="gridMusicasPublicas">
+            <!-- Le script va injecter les musiques ici -->
+            <p style="text-align: center; width: 100%; color: var(--gris-texte);">Chargement des musiques...</p>
         </div>
     </section>
 
@@ -148,15 +179,71 @@
         </div>
     </footer>
 
+    <!-- Firebase pour récupérer les musiques publiques -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
     <script>
-        // Script pour changer le bouton si l'utilisateur est connecté
+        // Config Firebase
+        var firebaseConfig = {
+            apiKey: "AIzaSyA7HeUqyxwtrL36UxZrMBfkq-yGPIVLrI4",
+            authDomain: "dsk-muzik-pulse.firebaseapp.com",
+            projectId: "dsk-muzik-pulse",
+            storageBucket: "dsk-muzik-pulse.firebasestorage.app",
+            messagingSenderId: "1087273927994",
+            appId: "1:1087273927994:web:b4d484d84779e1c8733c03"
+        };
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+
+        // Vérifier si l'utilisateur est connecté pour changer le bouton
         if (localStorage.getItem('dsk_nome_artista')) {
             var btn = document.getElementById('btnHeaderAuth');
-            if(btn) {
-                btn.textContent = "Mon Compte";
-                btn.href = "minha-conta.html";
-            }
+            if(btn) { btn.textContent = "Mon Compte"; btn.href = "minha-conta.html"; }
         }
+
+        // Charger les musiques approuvées
+        var grid = document.getElementById('gridMusicasPublicas');
+        
+        db.collection("divulgacoes").where("status", "==", "Approuvé").get().then((querySnapshot) => {
+            if (querySnapshot.empty) {
+                grid.innerHTML = '<p style="text-align: center; width: 100%; color: var(--gris-texte); padding: 40px;">Aucune musique approuvée pour le moment. Revenez bientôt !</p>';
+            } else {
+                let html = '';
+                querySnapshot.forEach((doc) => {
+                    let m = doc.data();
+                    
+                    // URL audio de démonstration pour que le lecteur fonctionne
+                    let audioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"; 
+
+                    html += `
+                        <div class="card-musica">
+                            <div class="capa-musica">
+                                <i class="bi bi-music-note-beamed"></i> <!-- Icône par défaut -->
+                            </div>
+                            <div class="info-musica">
+                                <h3>${m.titulo}</h3>
+                                <p>${m.artista}</p>
+                                <span class="tag-genero">${m.genero}</span>
+                            </div>
+                            <audio controls class="player-audio">
+                                <source src="${audioUrl}" type="audio/mpeg">
+                                Votre navigateur ne supporte pas l'audio.
+                            </audio>
+                            <div class="acoes-musica">
+                                <a href="${audioUrl}" download class="btn btn-jaune"><i class="bi bi-download"></i> Télécharger</a>
+                            </div>
+                        </div>
+                    `;
+                });
+                grid.innerHTML = html;
+            }
+        }).catch((error) => {
+            grid.innerHTML = '<p style="text-align: center; width: 100%; color: var(--rouge-neon);">Erreur de chargement des musiques.</p>';
+        });
     </script>
+    
+    <!-- Icônes Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </body>
-    </html>
+        </html>
