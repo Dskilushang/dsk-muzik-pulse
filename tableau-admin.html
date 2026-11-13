@@ -35,6 +35,7 @@
         .btn-acao { padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; font-size: 12px; margin-right: 5px; color: #fff; }
         .btn-aprovar { background: var(--vert); }
         .btn-rejeitar { background: var(--rouge); }
+        .btn-validar { background: var(--jaune); color: var(--noir); }
     </style>
 </head>
 <body>
@@ -57,25 +58,25 @@
             <div class="card verde"><p>Revenus (Kz)</p><h3>0</h3></div>
         </div>
 
-        <!-- TABLEAU DES DIVULGAÇÕES (AVEC BOUTONS) -->
-        <h2 class="secao-titulo">Toutes les Divulgations (À Approuver)</h2>
+        <!-- TABLEAU DES PAIEMENTS (NOUVEAU) -->
+        <h2 class="secao-titulo">💰 Demandes de Paiement (Artistes)</h2>
         <table class="tabela">
             <thead>
-                <tr><th>Artiste</th><th>Musique</th><th>Genre</th><th>Statut</th><th>Actions</th></tr>
+                <tr><th>Email Artiste</th><th>Plan Choisi</th><th>Statut Paiement</th><th>Actions</th></tr>
             </thead>
-            <tbody id="tabelaDivulgacoes">
-                <tr><td colspan="5" style="text-align: center; color: var(--gris); padding: 30px;">Chargement des divulgations...</td></tr>
+            <tbody id="tabelaPagamentos">
+                <tr><td colspan="4" style="text-align: center; color: var(--gris); padding: 30px;">Chargement des paiements...</td></tr>
             </tbody>
         </table>
 
-        <!-- TABLEAU DES ARTISTES -->
-        <h2 class="secao-titulo">Artistes Inscrits</h2>
+        <!-- TABLEAU DES DIVULGAÇÕES -->
+        <h2 class="secao-titulo">🎵 Divulgações (Musiques)</h2>
         <table class="tabela">
             <thead>
-                <tr><th>Email</th><th>Date d'inscription</th></tr>
+                <tr><th>Artiste</th><th>Musique</th><th>Statut</th><th>Actions</th></tr>
             </thead>
-            <tbody id="tabelaArtistas">
-                <tr><td colspan="2" style="text-align: center; color: var(--gris); padding: 30px;">Chargement des artistes...</td></tr>
+            <tbody id="tabelaDivulgacoes">
+                <tr><td colspan="4" style="text-align: center; color: var(--gris); padding: 30px;">Chargement des divulgations...</td></tr>
             </tbody>
         </table>
     </main>
@@ -85,7 +86,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <script>
-        // Sécurité Admin
         if (sessionStorage.getItem('dsk_admin_logado') !== 'true') {
             window.location.href = 'espace-admin.html';
         }
@@ -107,13 +107,45 @@
         firebase.initializeApp(firebaseConfig);
         var db = firebase.firestore();
 
-        // 1. CHARGER LES DIVULGAÇÕES
+        // 1. CHARGER LES PAIEMENTS (ARTISTES)
+        db.collection("artistes").get().then((querySnapshot) => {
+            document.getElementById('totalArtistas').textContent = querySnapshot.size;
+            
+            let html = '';
+            if (querySnapshot.empty) {
+                html = '<tr><td colspan="4" style="text-align: center; color: var(--gris); padding: 30px;">Aucun artiste inscrit.</td></tr>';
+            } else {
+                querySnapshot.forEach((doc) => {
+                    let a = doc.data();
+                    let statusPag = a.statusPagamento || "Aucun paiement";
+                    let corStatus = statusPag === 'Payé' ? 'var(--vert)' : 'var(--jaune)';
+                    
+                    // On n'affiche que si l'artiste a un plan ou un statut de paiement
+                    if (a.plano && a.plano !== 'Start') {
+                        html += `
+                            <tr>
+                                <td>${a.email}</td>
+                                <td><strong style="color:var(--jaune);">${a.plano}</strong></td>
+                                <td><span style="color: ${corStatus}; font-weight: bold;">${statusPag}</span></td>
+                                <td>
+                                    <button class="btn-acao btn-validar" onclick="validarPagamento('${doc.id}', '${a.plano}')">Valider</button>
+                                </td>
+                            </tr>
+                        `;
+                    }
+                });
+                if (html === '') html = '<tr><td colspan="4" style="text-align: center; color: var(--gris); padding: 30px;">Aucune demande de paiement.</td></tr>';
+            }
+            document.getElementById('tabelaPagamentos').innerHTML = html;
+        });
+
+        // 2. CHARGER LES DIVULGAÇÕES
         db.collection("divulgacoes").get().then((querySnapshot) => {
             document.getElementById('totalDivulgacoes').textContent = querySnapshot.size;
             
             let html = '';
             if (querySnapshot.empty) {
-                html = '<tr><td colspan="5" style="text-align: center; color: var(--gris); padding: 30px;">Aucune musique envoyée pour le moment.</td></tr>';
+                html = '<tr><td colspan="4" style="text-align: center; color: var(--gris); padding: 30px;">Aucune musique envoyée.</td></tr>';
             } else {
                 querySnapshot.forEach((doc) => {
                     let m = doc.data();
@@ -122,7 +154,6 @@
                         <tr>
                             <td>${m.artista}</td>
                             <td><strong>${m.titulo}</strong></td>
-                            <td style="color: var(--gris);">${m.genero}</td>
                             <td><span style="color: ${corStatus}; font-weight: bold;">${m.status}</span></td>
                             <td>
                                 <button class="btn-acao btn-aprovar" onclick="mudarStatus('${doc.id}', 'Approuvé')">Approuver</button>
@@ -135,29 +166,26 @@
             document.getElementById('tabelaDivulgacoes').innerHTML = html;
         });
 
-        // 2. CHARGER LES ARTISTES
-        db.collection("artistes").get().then((querySnapshot) => {
-            document.getElementById('totalArtistas').textContent = querySnapshot.size;
-            
-            let html = '';
-            if (querySnapshot.empty) {
-                html = '<tr><td colspan="2" style="text-align: center; color: var(--gris); padding: 30px;">Aucun artiste inscrit.</td></tr>';
-            } else {
-                querySnapshot.forEach((doc) => {
-                    let a = doc.data();
-                    let data = a.dataCadastro ? new Date(a.dataCadastro.seconds * 1000).toLocaleDateString('fr-FR') : '—';
-                    html += `<tr><td>${a.email}</td><td>${data}</td></tr>`;
+        // 3. VALIDER UN PAIEMENT
+        function validarPagamento(idArtista, plano) {
+            if(confirm("Avez-vous bien reçu le paiement pour le plan " + plano + " ?")) {
+                db.collection("artistes").doc(idArtista).update({
+                    statusPagamento: "Payé"
+                }).then(() => {
+                    alert("Paiement validé avec succès !");
+                    window.location.reload();
+                }).catch((error) => {
+                    alert("Erreur : " + error.message);
                 });
             }
-            document.getElementById('tabelaArtistas').innerHTML = html;
-        });
+        }
 
-        // 3. FONCTION APPROUVER / REJETER
+        // 4. APPROUVER / REJETER UNE MUSIQUE
         function mudarStatus(idDoc, novoStatus) {
             db.collection("divulgacoes").doc(idDoc).update({
                 status: novoStatus
             }).then(() => {
-                alert("Statut mis à jour : " + novoStatus);
+                alert("Statut de la musique mis à jour : " + novoStatus);
                 window.location.reload(); 
             }).catch((error) => {
                 alert("Erreur : " + error.message);
