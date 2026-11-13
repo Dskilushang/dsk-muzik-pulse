@@ -174,7 +174,7 @@
         var auth = firebase.auth();
         var db = firebase.firestore(); // <--- LA LIGNE MAGIQUE EST ICI
 
-        auth.onAuthStateChanged(function(user) {
+        . {
             if (user) {
                 var nome = user.email.split('@')[0];
                 document.getElementById('nomeArtista').textContent = nome;
@@ -211,6 +211,7 @@ if (listaMusicasHTML) {
             });
         }
     });
+        }
         }
 
         function mudarAba(aba) {
