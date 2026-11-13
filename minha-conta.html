@@ -29,7 +29,9 @@
         .header-conta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .header-conta h1 { font-size: 1.8rem; }
         .header-conta h1 span { color: var(--jaune); }
-        .avatar-user { width: 50px; height: 50px; border-radius: 50%; background: var(--rouge); display: flex; justify-content: center; align-items: center; font-weight: 800; }
+        
+        /* Avatar dynamique */
+        .avatar-user { width: 50px; height: 50px; border-radius: 50%; background: var(--rouge); display: flex; justify-content: center; align-items: center; font-weight: 800; background-size: cover; background-position: center; }
 
         .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
         .card-stat { background-color: var(--carte); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); }
@@ -39,19 +41,12 @@
 
         .campo-grupo { margin-bottom: 20px; }
         .campo-grupo label { display: block; font-size: 13px; color: var(--gris); margin-bottom: 8px; font-weight: 600; }
-        .campo-grupo input, .campo-grupo select { width: 100%; padding: 14px; background: var(--noir); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--blanc); font-size: 15px; outline: none; }
-        .campo-grupo input:focus, .campo-grupo select:focus { border-color: var(--jaune); }
-        
-        .area-upload { border: 2px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 30px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; }
-        .area-upload:hover { border-color: var(--jaune); background: rgba(255, 215, 0, 0.05); }
-        .area-upload input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-        .area-upload i { font-size: 40px; color: var(--jaune); margin-bottom: 10px; display: block; }
-        .area-upload p { font-size: 14px; font-weight: 600; }
-        .area-upload span { font-size: 12px; color: var(--gris); }
+        .campo-grupo input, .campo-grupo select, .campo-grupo textarea { width: 100%; padding: 14px; background: var(--noir); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--blanc); font-size: 15px; outline: none; font-family: inherit; }
+        .campo-grupo input:focus, .campo-grupo select:focus, .campo-grupo textarea:focus { border-color: var(--jaune); }
+        .campo-grupo textarea { resize: vertical; min-height: 100px; }
 
         .btn-enviar { width: 100%; padding: 16px; border-radius: 8px; font-weight: 800; font-size: 16px; cursor: pointer; border: none; background: var(--rouge); color: var(--blanc); margin-top: 10px; transition: 0.3s; }
         .btn-enviar:hover { box-shadow: 0 0 20px rgba(255, 0, 51, 0.6); transform: translateY(-2px); }
-        .btn-enviar:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .tabela-musicas { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .tabela-musicas th { text-align: left; padding: 12px; color: var(--gris); font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
@@ -75,12 +70,13 @@
         <div class="menu-item ativo" onclick="mudarAba('dashboard')">📊 Tableau de bord</div>
         <div class="menu-item" onclick="mudarAba('divulgacao')">🎵 Mes Divulgations</div>
         <div class="menu-item" onclick="mudarAba('carteira')">💰 Mon Portefeuille</div>
+        <!-- NOUVEL ONGLET PARAMÈTRES -->
+        <div class="menu-item" onclick="mudarAba('parametros')">⚙️ Paramètres</div>
         <button class="btn-sair" onclick="sair()">Se déconnecter</button>
     </aside>
 
     <main class="main-content">
         
-        <!-- ABA 1: DASHBOARD -->
         <div id="aba-dashboard" class="pagina ativa">
             <div class="header-conta">
                 <h1>Bonjour, <span id="nomeArtista">Artiste</span> 👋</h1>
@@ -100,28 +96,18 @@
             </div>
         </div>
 
-        <!-- ABA 2: FORMULAIRE DE DIVULGAÇÃO (AVEC CLOUDINARY) -->
         <div id="aba-divulgacao" class="pagina">
             <div class="header-conta">
                 <h1>Nouvelle <span>Divulgation</span></h1>
             </div>
             <form onsubmit="enviarMusica(event)" style="max-width: 600px;">
                 <div class="campo-grupo">
-                    <label>Fichier Audio (MP3/WAV) *</label>
-                    <div class="area-upload">
-                        <input type="file" id="audioFile" accept=".mp3, .wav, .m4a" required onchange="mostrarNomeArquivo(this)">
-                        <i class="bi bi-cloud-arrow-up"></i>
-                        <p id="audioNome">Cliquez pour choisir votre musique</p>
-                        <span>MP3, WAV ou M4A (max 50MB)</span>
-                    </div>
+                    <label>Lien direct de la musique (MP3) *</label>
+                    <input type="url" id="audioUrl" placeholder="https://exemple.com/ma-musique.mp3" required>
                 </div>
                 <div class="campo-grupo">
-                    <label>Image de couverture (JPG/PNG)</label>
-                    <div class="area-upload">
-                        <input type="file" id="capaFile" accept="image/*" onchange="mostrarNomeCapa(this)">
-                        <i class="bi bi-image"></i>
-                        <p id="capaNome">Cliquez pour ajouter une image</p>
-                    </div>
+                    <label>Lien de l'image de couverture (JPG/PNG)</label>
+                    <input type="url" id="capaUrl" placeholder="https://exemple.com/ma-photo.jpg">
                 </div>
                 <div class="campo-grupo">
                     <label>Nom de la musique *</label>
@@ -145,11 +131,10 @@
                         <option>R&B</option>
                     </select>
                 </div>
-                <button type="submit" id="btnEnviar" class="btn-enviar">Envoyer la Musique</button>
+                <button type="submit" class="btn-enviar">Envoyer la Musique</button>
             </form>
         </div>
 
-        <!-- ABA 3: CARTEIRA -->
         <div id="aba-carteira" class="pagina">
             <div class="header-conta">
                 <h1>Mon <span>Portefeuille</span></h1>
@@ -158,6 +143,24 @@
                 <div class="card-stat destaque"><p>Solde Total</p><h3>0,00 Kz</h3></div>
             </div>
             <p style="color: var(--gris);">Les gains de vos écoutes apparaîtront ici.</p>
+        </div>
+
+        <!-- NOUVEL ONGLET PARAMÈTRES -->
+        <div id="aba-parametros" class="pagina">
+            <div class="header-conta">
+                <h1>Paramètres du <span>Profil</span></h1>
+            </div>
+            <form onsubmit="salvarPerfil(event)" style="max-width: 600px;">
+                <div class="campo-grupo">
+                    <label>Lien de votre photo de profil (JPG/PNG)</label>
+                    <input type="url" id="fotoPerfilUrl" placeholder="https://exemple.com/ma-photo.jpg">
+                </div>
+                <div class="campo-grupo">
+                    <label>Biographie (courte description)</label>
+                    <textarea id="bioArtista" placeholder="Parlez de vous, de votre style musical..."></textarea>
+                </div>
+                <button type="submit" class="btn-enviar">Enregistrer les modifications</button>
+            </form>
         </div>
 
     </main>
@@ -180,18 +183,31 @@
         var auth = firebase.auth();
         var db = firebase.firestore();
 
-        // --- CLOUDINARY CONFIGURATION ---
-        var CLOUDINARY_CLOUD_NAME = "wavqyy8";
-        var CLOUDINARY_UPLOAD_PRESET = "dsk_unsigned"; // Assurez-vous que ce preset existe et est "Unsigned"
-
         auth.onAuthStateChanged(function(user) {
             if (user) {
-                var nome = user.email.split('@')[0];
-                document.getElementById('nomeArtista').textContent = nome;
-                document.getElementById('avatarUser').textContent = nome.substring(0, 2).toUpperCase();
-                document.getElementById('nomeArtistaInput').value = nome;
+                // Charger les infos du profil
+                db.collection("artistes").doc(user.uid).get().then((doc) => {
+                    if(doc.exists) {
+                        var data = doc.data();
+                        var nome = data.nome || user.email.split('@')[0];
+                        document.getElementById('nomeArtista').textContent = nome;
+                        document.getElementById('nomeArtistaInput').value = nome;
+                        
+                        // Avatar
+                        if(data.fotoPerfilUrl) {
+                            document.getElementById('avatarUser').style.backgroundImage = `url('${data.fotoPerfilUrl}')`;
+                            document.getElementById('avatarUser').textContent = '';
+                        } else {
+                            document.getElementById('avatarUser').textContent = nome.substring(0, 2).toUpperCase();
+                        }
 
-                // Charger la liste des musiques
+                        // Paramètres
+                        document.getElementById('fotoPerfilUrl').value = data.fotoPerfilUrl || '';
+                        document.getElementById('bioArtista').value = data.bio || '';
+                    }
+                });
+
+                // Charger les musiques
                 db.collection("divulgacoes").where("uid", "==", user.uid).get().then((querySnapshot) => {
                     var listaDiv = document.getElementById('listaMusicasArtista');
                     if (querySnapshot.empty) {
@@ -216,89 +232,57 @@
             document.querySelectorAll('.pagina').forEach(p => p.classList.remove('ativa'));
             document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('ativo'));
             document.getElementById('aba-' + aba).classList.add('ativa');
-            if(aba === 'dashboard') document.querySelectorAll('.menu-item')[0].classList.add('ativo');
-            if(aba === 'divulgacao') document.querySelectorAll('.menu-item')[1].classList.add('ativo');
-            if(aba === 'carteira') document.querySelectorAll('.menu-item')[2].classList.add('ativo');
-        }
-
-        function mostrarNomeArquivo(input) {
-            if (input.files && input.files[0]) document.getElementById('audioNome').textContent = input.files[0].name;
-        }
-        function mostrarNomeCapa(input) {
-            if (input.files && input.files[0]) document.getElementById('capaNome').textContent = input.files[0].name;
-        }
-
-        // --- LA FONCTION D'UPLOAD CLOUDINARY ---
-        async function enviarMusica(e) {
-            e.preventDefault();
             
-            var btn = document.getElementById('btnEnviar');
-            btn.disabled = true;
-            btn.textContent = "Envoi en cours... (patientez)";
+            var items = document.querySelectorAll('.menu-item');
+            if(aba === 'dashboard') items[0].classList.add('ativo');
+            if(aba === 'divulgacao') items[1].classList.add('ativo');
+            if(aba === 'carteira') items[2].classList.add('ativo');
+            if(aba === 'parametros') items[3].classList.add('ativo');
+        }
 
+        function enviarMusica(e) {
+            e.preventDefault();
+            var audioUrl = document.getElementById('audioUrl').value;
+            var capaUrl = document.getElementById('capaUrl').value;
             var titulo = document.getElementById('nomeMusica').value;
             var artista = document.getElementById('nomeArtistaInput').value;
             var genero = document.getElementById('genero').value;
-            var audioFile = document.getElementById('audioFile').files[0];
-            var capaFile = document.getElementById('capaFile').files[0];
             var user = firebase.auth().currentUser;
             
             if (!user) { alert("Vous devez être connecté."); return; }
-            if (!audioFile) { alert("Veuillez sélectionner un fichier audio."); return; }
 
-            try {
-                // 1. Upload de l'audio sur Cloudinary
-                var formDataAudio = new FormData();
-                formDataAudio.append('file', audioFile);
-                formDataAudio.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-
-                var resAudio = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`, {
-                    method: 'POST',
-                    body: formDataAudio
-                });
-                var dataAudio = await resAudio.json();
-                
-                if(dataAudio.error) throw new Error("Erreur Cloudinary (Audio) : " + dataAudio.error.message);
-                var audioUrl = dataAudio.secure_url;
-
-                // 2. Upload de l'image sur Cloudinary (si elle existe)
-                var capaUrl = "";
-                if (capaFile) {
-                    var formDataCapa = new FormData();
-                    formDataCapa.append('file', capaFile);
-                    formDataCapa.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-
-                    var resCapa = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`, {
-                        method: 'POST',
-                        body: formDataCapa
-                    });
-                    var dataCapa = await resCapa.json();
-                    if(!dataCapa.error) capaUrl = dataCapa.secure_url;
-                }
-
-                // 3. Sauvegarde dans Firebase avec les VRAIES URLs
-                await db.collection("divulgacoes").add({
-                    uid: user.uid,
-                    titulo: titulo,
-                    artista: artista,
-                    genero: genero,
-                    audioUrl: audioUrl, // Lien réel du MP3
-                    capaUrl: capaUrl,   // Lien réel de l'image
-                    data: new Date(),
-                    status: "En attente"
-                });
-
-                alert("Musique et image uploadées avec succès !");
+            db.collection("divulgacoes").add({
+                uid: user.uid, titulo: titulo, artista: artista, genero: genero, audioUrl: audioUrl, capaUrl: capaUrl, data: new Date(), status: "En attente"
+            })
+            .then(function() {
+                alert("Musique enregistrée avec succès !");
                 mudarAba('dashboard');
                 document.getElementById('nomeMusica').value = '';
                 document.getElementById('genero').value = '';
                 window.location.reload(); 
+            })
+            .catch(function(error) { alert("Erreur : " + error.message); });
+        }
 
-            } catch (error) {
-                alert("Erreur lors de l'envoi : " + error.message);
-                btn.disabled = false;
-                btn.textContent = "Envoyer la Musique";
-            }
+        // NOUVELLE FONCTION POUR SAUVEGARDER LE PROFIL
+        function salvarPerfil(e) {
+            e.preventDefault();
+            var user = firebase.auth().currentUser;
+            var fotoUrl = document.getElementById('fotoPerfilUrl').value;
+            var bio = document.getElementById('bioArtista').value;
+
+            db.collection("artistes").doc(user.uid).update({
+                fotoPerfilUrl: fotoUrl,
+                bio: bio
+            }).then(function() {
+                alert("Profil mis à jour avec succès !");
+                if(fotoUrl) {
+                    document.getElementById('avatarUser').style.backgroundImage = `url('${fotoUrl}')`;
+                    document.getElementById('avatarUser').textContent = '';
+                }
+            }).catch(function(error) {
+                alert("Erreur : " + error.message);
+            });
         }
 
         function sair() {
@@ -306,4 +290,4 @@
         }
     </script>
 </body>
-            </html>
+</html> 
