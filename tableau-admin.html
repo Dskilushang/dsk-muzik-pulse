@@ -58,14 +58,14 @@
             <div class="card verde"><p>Revenus (Kz)</p><h3>0</h3></div>
         </div>
 
-        <!-- TABLEAU DES PAIEMENTS (NOUVEAU) -->
-        <h2 class="secao-titulo">💰 Demandes de Paiement (Artistes)</h2>
+        <!-- TABLEAU DES ARTISTES -->
+        <h2 class="secao-titulo">👥 Artistes Inscrits</h2>
         <table class="tabela">
             <thead>
-                <tr><th>Email Artiste</th><th>Plan Choisi</th><th>Statut Paiement</th><th>Actions</th></tr>
+                <tr><th>Email</th><th>Plan Actuel</th><th>Statut Paiement</th><th>Actions</th></tr>
             </thead>
-            <tbody id="tabelaPagamentos">
-                <tr><td colspan="4" style="text-align: center; color: var(--gris); padding: 30px;">Chargement des paiements...</td></tr>
+            <tbody id="tabelaArtistas">
+                <tr><td colspan="4" style="text-align: center; color: var(--gris); padding: 30px;">Chargement des artistes...</td></tr>
             </tbody>
         </table>
 
@@ -86,6 +86,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <script>
+        // Sécurité Admin
         if (sessionStorage.getItem('dsk_admin_logado') !== 'true') {
             window.location.href = 'espace-admin.html';
         }
@@ -107,7 +108,7 @@
         firebase.initializeApp(firebaseConfig);
         var db = firebase.firestore();
 
-        // 1. CHARGER LES PAIEMENTS (ARTISTES)
+        // 1. CHARGER LES ARTISTES (Avec correction d'affichage)
         db.collection("artistes").get().then((querySnapshot) => {
             document.getElementById('totalArtistas').textContent = querySnapshot.size;
             
@@ -117,26 +118,25 @@
             } else {
                 querySnapshot.forEach((doc) => {
                     let a = doc.data();
+                    let plano = a.plano || "Start";
                     let statusPag = a.statusPagamento || "Aucun paiement";
                     let corStatus = statusPag === 'Payé' ? 'var(--vert)' : 'var(--jaune)';
                     
-                    // On n'affiche que si l'artiste a un plan ou un statut de paiement
-                    if (a.plano && a.plano !== 'Start') {
-                        html += `
-                            <tr>
-                                <td>${a.email}</td>
-                                <td><strong style="color:var(--jaune);">${a.plano}</strong></td>
-                                <td><span style="color: ${corStatus}; font-weight: bold;">${statusPag}</span></td>
-                                <td>
-                                    <button class="btn-acao btn-validar" onclick="validarPagamento('${doc.id}', '${a.plano}')">Valider</button>
-                                </td>
-                            </tr>
-                        `;
-                    }
+                    html += `
+                        <tr>
+                            <td>${a.email}</td>
+                            <td><strong style="color:var(--jaune);">${plano}</strong></td>
+                            <td><span style="color: ${corStatus}; font-weight: bold;">${statusPag}</span></td>
+                            <td>
+                                ${statusPag !== 'Payé' ? `<button class="btn-acao btn-validar" onclick="validarPagamento('${doc.id}', '${plano}')">Valider Paiement</button>` : '<span style="color:var(--vert);">✓ Validé</span>'}
+                            </td>
+                        </tr>
+                    `;
                 });
-                if (html === '') html = '<tr><td colspan="4" style="text-align: center; color: var(--gris); padding: 30px;">Aucune demande de paiement.</td></tr>';
             }
-            document.getElementById('tabelaPagamentos').innerHTML = html;
+            document.getElementById('tabelaArtistas').innerHTML = html;
+        }).catch((error) => {
+            document.getElementById('tabelaArtistas').innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--rouge); padding: 30px;">Erreur de chargement (Vérifiez les règles Firestore).</td></tr>';
         });
 
         // 2. CHARGER LES DIVULGAÇÕES
@@ -193,4 +193,4 @@
         }
     </script>
 </body>
-</html>
+    </html>
