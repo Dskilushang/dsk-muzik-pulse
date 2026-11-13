@@ -14,7 +14,6 @@
         body { background-color: var(--noir); color: var(--blanc); display: flex; min-height: 100vh; }
         a { text-decoration: none; color: inherit; }
 
-        /* Sidebar */
         .sidebar { width: 260px; background-color: var(--carte); padding: 30px 20px; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; }
         .sidebar-logo img { height: 40px; margin-bottom: 40px; }
         .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px; border-radius: 10px; color: var(--gris); font-weight: 600; margin-bottom: 10px; cursor: pointer; transition: all 0.3s; }
@@ -22,7 +21,6 @@
         .btn-sair { margin-top: auto; background: transparent; border: 1px solid var(--rouge); color: var(--rouge); padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
         .btn-sair:hover { background: var(--rouge); color: var(--blanc); }
 
-        /* Main Content */
         .main-content { flex: 1; padding: 40px; overflow-y: auto; }
         .pagina { display: none; animation: fadeIn 0.4s ease; }
         .pagina.ativa { display: block; }
@@ -33,14 +31,12 @@
         .header-conta h1 span { color: var(--jaune); }
         .avatar-user { width: 50px; height: 50px; border-radius: 50%; background: var(--rouge); display: flex; justify-content: center; align-items: center; font-weight: 800; }
 
-        /* Dashboard */
         .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
         .card-stat { background-color: var(--carte); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); }
         .card-stat p { color: var(--gris); font-size: 0.9rem; margin-bottom: 10px; }
         .card-stat h3 { font-size: 2rem; font-weight: 800; }
         .card-stat.destaque h3 { color: var(--vert); }
 
-        /* Formulário de Divulgação */
         .campo-grupo { margin-bottom: 20px; }
         .campo-grupo label { display: block; font-size: 13px; color: var(--gris); margin-bottom: 8px; font-weight: 600; }
         .campo-grupo input, .campo-grupo select { width: 100%; padding: 14px; background: var(--noir); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--blanc); font-size: 15px; outline: none; }
@@ -71,7 +67,6 @@
         <div class="sidebar-logo">
             <img src="assets/images/logo-header.png" alt="DSK Muzik Pulse">
         </div>
-        <!-- MENU INTERATIVO -->
         <div class="menu-item ativo" onclick="mudarAba('dashboard')">📊 Tableau de bord</div>
         <div class="menu-item" onclick="mudarAba('divulgacao')">🎵 Mes Divulgations</div>
         <div class="menu-item" onclick="mudarAba('carteira')">💰 Mon Portefeuille</div>
@@ -80,7 +75,6 @@
 
     <main class="main-content">
         
-        <!-- ABA 1: DASHBOARD -->
         <div id="aba-dashboard" class="pagina ativa">
             <div class="header-conta">
                 <h1>Bonjour, <span id="nomeArtista">Artiste</span> 👋</h1>
@@ -99,7 +93,6 @@
             </div>
         </div>
 
-        <!-- ABA 2: FORMULAIRE DE DIVULGAÇÃO -->
         <div id="aba-divulgacao" class="pagina">
             <div class="header-conta">
                 <h1>Nouvelle <span>Divulgation</span></h1>
@@ -148,7 +141,6 @@
             </form>
         </div>
 
-        <!-- ABA 3: CARTEIRA -->
         <div id="aba-carteira" class="pagina">
             <div class="header-conta">
                 <h1>Mon <span>Portefeuille</span></h1>
@@ -164,6 +156,7 @@
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <script>
         var firebaseConfig = {
@@ -176,8 +169,8 @@
         };
         firebase.initializeApp(firebaseConfig);
         var auth = firebase.auth();
+        var db = firebase.firestore(); // <--- LA LIGNE MAGIQUE EST ICI
 
-        // Vérifier si connecté
         auth.onAuthStateChanged(function(user) {
             if (user) {
                 var nome = user.email.split('@')[0];
@@ -189,19 +182,15 @@
             }
         });
 
-        // Changer d'onglet (Menu)
         function mudarAba(aba) {
             document.querySelectorAll('.pagina').forEach(p => p.classList.remove('ativa'));
             document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('ativo'));
-            
             document.getElementById('aba-' + aba).classList.add('ativa');
-            
             if(aba === 'dashboard') document.querySelectorAll('.menu-item')[0].classList.add('ativo');
             if(aba === 'divulgacao') document.querySelectorAll('.menu-item')[1].classList.add('ativo');
             if(aba === 'carteira') document.querySelectorAll('.menu-item')[2].classList.add('ativo');
         }
 
-        // Upload visual
         function mostrarNomeArquivo(input) {
             if (input.files && input.files[0]) document.getElementById('audioNome').textContent = input.files[0].name;
         }
@@ -209,43 +198,40 @@
             if (input.files && input.files[0]) document.getElementById('capaNome').textContent = input.files[0].name;
         }
 
-        // Enviar Musica (Simulação por enquanto)
         function enviarMusica(e) {
-    e.preventDefault();
-    
-    // On récupère les infos du formulaire
-    var titulo = document.getElementById('nomeMusica').value;
-    var artista = document.getElementById('nomeArtistaInput').value;
-    var genero = document.getElementById('genero').value;
-    
-    // On récupère l'utilisateur connecté
-    var user = firebase.auth().currentUser;
-    
-    if (!user) {
-        alert("Vous devez être connecté.");
-        return;
-    }
+            e.preventDefault();
+            var titulo = document.getElementById('nomeMusica').value;
+            var artista = document.getElementById('nomeArtistaInput').value;
+            var genero = document.getElementById('genero').value;
+            var user = firebase.auth().currentUser;
+            
+            if (!user) {
+                alert("Vous devez être connecté.");
+                return;
+            }
 
-    // On enregistre dans Firestore (collection "divulgacoes")
-    db.collection("divulgacoes").add({
-        uid: user.uid,
-        titulo: titulo,
-        artista: artista,
-        genero: genero,
-        data: new Date(),
-        status: "En attente" // L'admin devra valider
-    })
-    .then(function() {
-        alert("Musique enregistrée avec succès ! Elle apparaîtra dans votre tableau de bord.");
-        mudarAba('dashboard');
-        // On vide le formulaire
-        document.getElementById('nomeMusica').value = '';
-        document.getElementById('genero').value = '';
-    })
-    .catch(function(error) {
-        alert("Erreur : " + error.message);
-    });
-    }
+            db.collection("divulgacoes").add({
+                uid: user.uid,
+                titulo: titulo,
+                artista: artista,
+                genero: genero,
+                data: new Date(),
+                status: "En attente"
+            })
+            .then(function() {
+                alert("Musique enregistrée avec succès !");
+                mudarAba('dashboard');
+                document.getElementById('nomeMusica').value = '';
+                document.getElementById('genero').value = '';
+            })
+            .catch(function(error) {
+                alert("Erreur : " + error.message);
+            });
+        }
+
+        function sair() {
+            auth.signOut().then(function() { window.location.href = 'index.html'; });
+        }
     </script>
 </body>
-    </html>
+            </html>
