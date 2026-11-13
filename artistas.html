@@ -14,28 +14,33 @@
         body { background-color: var(--noir); color: var(--blanc); line-height: 1.6; }
         a { text-decoration: none; color: inherit; }
 
-        /* Header */
         header { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background-color: rgba(10, 10, 11, 0.9); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
         .logo-header img { height: 40px; }
         .btn-voltar { padding: 8px 16px; border-radius: 8px; background: transparent; border: 1px solid var(--gris); color: var(--blanc); font-weight: 600; transition: 0.3s; }
         .btn-voltar:hover { border-color: var(--jaune); color: var(--jaune); }
 
-        /* Bannière Artiste */
         .banner { height: 250px; background: linear-gradient(135deg, #1a1a1f, #0a0a0d); position: relative; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .banner::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(255, 0, 51, 0.15) 0%, transparent 60%); }
         
         .perfil-info { max-width: 1000px; margin: -60px auto 40px; padding: 0 20px; position: relative; z-index: 2; display: flex; align-items: flex-end; gap: 20px; }
-        .avatar-artista { width: 140px; height: 140px; border-radius: 50%; background: linear-gradient(135deg, var(--rouge), #B0050F); display: flex; justify-content: center; align-items: center; font-size: 50px; font-weight: 800; border: 4px solid var(--noir); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        /* L'avatar peut maintenant être une image */
+        .avatar-artista { width: 140px; height: 140px; border-radius: 50%; background: linear-gradient(135deg, var(--rouge), #B0050F); display: flex; justify-content: center; align-items: center; font-size: 50px; font-weight: 800; border: 4px solid var(--noir); box-shadow: 0 10px 30px rgba(0,0,0,0.5); background-size: cover; background-position: center; }
+        
         .nome-artista { font-size: 2.5rem; font-weight: 800; margin-bottom: 5px; }
+        .bio-artista { color: var(--gris); font-size: 14px; max-width: 600px; margin-top: 10px; margin-bottom: 10px; }
         .stats-artista { display: flex; gap: 20px; color: var(--gris); font-size: 14px; }
 
-        /* Músicas */
         .container { max-width: 1000px; margin: 0 auto; padding: 0 20px 60px; }
         .titulo-secao { font-size: 1.5rem; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         
         .grid-musicas { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .card-musica { background: var(--carte); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; transition: 0.3s; }
         .card-musica:hover { border-color: var(--jaune); transform: translateY(-5px); }
+        
+        .capa-musica { width: 100%; aspect-ratio: 1/1; background: linear-gradient(135deg, #333, #111); border-radius: 12px; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; background-size: cover; background-position: center; margin-bottom: 15px; }
+        .capa-musica i { font-size: 60px; color: rgba(255,255,255,0.1); }
+
         .card-musica h3 { font-size: 16px; margin-bottom: 5px; }
         .card-musica p { font-size: 12px; color: var(--gris); margin-bottom: 10px; }
         .tag-genero { display: inline-block; background: rgba(255, 215, 0, 0.1); color: var(--jaune); padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-bottom: 15px; }
@@ -65,6 +70,7 @@
         <div class="avatar-artista" id="avatarArtista">A</div>
         <div>
             <h1 class="nome-artista" id="nomeArtista">Chargement...</h1>
+            <p class="bio-artista" id="bioArtista"></p>
             <div class="stats-artista">
                 <span><i class="bi bi-music-note-beamed"></i> <strong id="totalMusicas">0</strong> Musiques</span>
                 <span><i class="bi bi-patch-check-fill" style="color: var(--jaune);"></i> Artiste Vérifié</span>
@@ -95,56 +101,75 @@
         firebase.initializeApp(firebaseConfig);
         var db = firebase.firestore();
 
-        // 1. Récupérer le nom de l'artiste depuis l'URL
         var urlParams = new URLSearchParams(window.location.search);
         var nomeArtista = urlParams.get('nome');
 
         if (!nomeArtista) {
             document.getElementById('nomeArtista').textContent = "Artiste Inconnu";
-            document.getElementById('gridMusicasArtista').innerHTML = '<p style="color: var(--rouge); text-align: center; width: 100%;">Aucun artiste spécifié.</p>';
         } else {
-            // Mettre à jour l'interface
             document.getElementById('nomeArtista').textContent = nomeArtista;
-            document.getElementById('avatarArtista').textContent = nomeArtista.substring(0, 2).toUpperCase();
             document.title = nomeArtista + " | DSK Muzik Pulse";
+            
+            // Initiales par défaut
+            document.getElementById('avatarArtista').textContent = nomeArtista.substring(0, 2).toUpperCase();
 
-            // 2. Chercher les musiques approuvées de cet artiste
+            // Chercher les infos du profil dans la collection "artistes"
+            // On cherche par le nom ou l'email
+            db.collection("artistes").get().then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    let a = doc.data();
+                    let nomeNoBanco = a.nome || (a.email ? a.email.split('@')[0] : '');
+                    
+                    if(nomeNoBanco.toLowerCase() === nomeArtista.toLowerCase() || (a.email && a.email.toLowerCase().includes(nomeArtista.toLowerCase()))) {
+                        // Mettre à jour l'avatar avec la vraie photo si elle existe
+                        if(a.fotoPerfilUrl) {
+                            document.getElementById('avatarArtista').style.backgroundImage = `url('${a.fotoPerfilUrl}')`;
+                            document.getElementById('avatarArtista').textContent = '';
+                        }
+                        // Mettre à jour la bio
+                        if(a.bio) {
+                            document.getElementById('bioArtista').textContent = a.bio;
+                        }
+                    }
+                });
+            });
+
+            // Chercher les musiques approuvées de cet artiste
             db.collection("divulgacoes").where("artista", "==", nomeArtista).get().then((querySnapshot) => {
                 var musicasAprovadas = [];
-                
                 querySnapshot.forEach((doc) => {
                     let m = doc.data();
-                    if(m.status === "Approuvé") {
-                        musicasAprovadas.push(m);
-                    }
+                    if(m.status === "Approuvé") musicasAprovadas.push(m);
                 });
 
                 document.getElementById('totalMusicas').textContent = musicasAprovadas.length;
-
                 var grid = document.getElementById('gridMusicasArtista');
+
                 if (musicasAprovadas.length === 0) {
                     grid.innerHTML = '<p style="color: var(--gris); text-align: center; width: 100%;">Cet artiste n\'a pas encore de musique approuvée.</p>';
                 } else {
                     let html = '';
                     musicasAprovadas.forEach((m) => {
-                        let audioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"; // Demo audio
+                        let lienAudio = m.audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+                        let styleCapa = m.capaUrl ? `background-image: url('${m.capaUrl}');` : '';
+                        let iconeCapa = m.capaUrl ? '' : '<i class="bi bi-music-note-beamed"></i>';
+
                         html += `
                             <div class="card-musica">
+                                <div class="capa-musica" style="${styleCapa}">${iconeCapa}</div>
                                 <h3>${m.titulo}</h3>
                                 <p>${m.genero}</p>
                                 <span class="tag-genero">${m.genero}</span>
                                 <audio controls class="player-audio">
-                                    <source src="${audioUrl}" type="audio/mpeg">
+                                    <source src="${lienAudio}" type="audio/mpeg">
                                 </audio>
                             </div>
                         `;
                     });
                     grid.innerHTML = html;
                 }
-            }).catch((error) => {
-                document.getElementById('gridMusicasArtista').innerHTML = '<p style="color: var(--rouge);">Erreur de chargement.</p>';
             });
         }
     </script>
 </body>
-  </html>
+    </html>
