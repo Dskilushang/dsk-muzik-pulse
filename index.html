@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -141,20 +141,23 @@
                 <h3>Start</h3>
                 <div class="preco">Gratuit</div>
                 <ul><li>Divulgation basique</li><li>1 musique/mois</li><li>Support par email</li></ul>
-                <a href="login.html" class="btn btn-contour">Choisir Start</a>
+                <!-- LE LIEN EST MODIFIÉ ICI -->
+                <a href="pagamento.html?plano=start" class="btn btn-contour">Choisir Start</a>
             </div>
             <div class="card-plano popular">
                 <div class="badge-popular">Populaire</div>
                 <h3>Viral</h3>
                 <div class="preco">25.000 <span>Kz/mois</span></div>
                 <ul><li>10 musiques/mois</li><li>Distribution automatique</li><li>Support prioritaire 24/7</li></ul>
-                <a href="login.html" class="btn btn-rouge">Choisir Viral</a>
+                <!-- LE LIEN EST MODIFIÉ ICI -->
+                <a href="pagamento.html?plano=viral" class="btn btn-rouge">Choisir Viral</a>
             </div>
             <div class="card-plano">
                 <h3>Lenda</h3>
                 <div class="preco">40.000 <span>Kz/mois</span></div>
                 <ul><li>Divulgation illimitée</li><li>Gestionnaire dédié</li><li>Mise en avant maximale</li></ul>
-                <a href="login.html" class="btn btn-jaune">Choisir Lenda</a>
+                <!-- LE LIEN EST MODIFIÉ ICI -->
+                <a href="pagamento.html?plano=lenda" class="btn btn-jaune">Choisir Lenda</a>
             </div>
         </div>
     </section>
@@ -170,7 +173,6 @@
                 <ul>
                     <li><a href="https://wa.me/244945125149">WhatsApp : +244 945 125 149</a></li>
                     <li><a href="mailto:danielkilusisa@gmail.com">danielkilusisa@gmail.com</a></li>
-                    <!-- LE LIEN VERS LES TERMOS EST ICI -->
                     <li><a href="termos.html" style="color: var(--jaune); font-weight: bold;">Conditions & Confidentialité</a></li>
                 </ul>
             </div>
@@ -196,13 +198,11 @@
         firebase.initializeApp(firebaseConfig);
         var db = firebase.firestore();
 
-        // Vérifier si l'utilisateur est connecté pour changer le bouton
         if (localStorage.getItem('dsk_nome_artista')) {
             var btn = document.getElementById('btnHeaderAuth');
             if(btn) { btn.textContent = "Mon Compte"; btn.href = "minha-conta.html"; }
         }
 
-        // Charger les musiques approuvées
         var grid = document.getElementById('gridMusicasPublicas');
         
         db.collection("divulgacoes").where("status", "==", "Approuvé").get().then((querySnapshot) => {
@@ -240,4 +240,4 @@
         });
     </script>
 </body>
-            </html>
+    </html>
